@@ -119,29 +119,26 @@ struct QuantityControl: View {
 
 
 struct CartPopUp: View {
-    var totalCalories: Int
-    var totalPrice: Int
+    let totalCalories: Int
+    let totalPrice: String  // Change from Int to String
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Your picked food")
-                .font(.headline)
-                .foregroundStyle(.white)
-            Text("Total Calories: \(totalCalories)")
-                .foregroundStyle(.white)
-                .font(.caption)
-            Text("Total Price: Rp\(totalPrice)")
-                .foregroundStyle(.white)
-                .font(.caption)
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Total Calories: \(totalCalories)")
+                Text("Total Price: Rp\(totalPrice)")
+            }
+            Spacer()
+            Button("Checkout") { /* Action */ }
         }
-        .frame(maxWidth: .infinity)
-        .background(Color.blue.opacity(0.9))
-        .cornerRadius(15)
-        .padding(.horizontal)
-        Spacer()
+        .padding() // Internal padding
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 5)
+        .padding(.horizontal) // External spacing from screen edges
+        .padding(.bottom,80)
     }
 }
-
 
 struct ContentView: View {
     @State private var searchText: String = ""
@@ -427,16 +424,30 @@ struct ContentView: View {
                 
             }
             if isCartVisible && !cartItems.isEmpty {
-                VStack {
-                    CartPopUp(totalCalories: totalCalories, totalPrice: totalPrice)
-                        .padding(.top, 10)
-                }
-                .frame(maxHeight: .infinity, alignment: .bottom)
+                CartPopUp(
+                    totalCalories: totalCalories,
+                    totalPrice: totalPrice.formattedWithSeparator
+                )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, 20) // Add bottom padding
+                    .ignoresSafeArea(.container, edges: .bottom) // Extend to bottom edge
+                    .background(Color.clear) // Clear background for proper ZStack layering
             }
             
             
         }
                 
+    }
+}
+
+// Add this extension outside the ContentView struct
+extension Int {
+    var formattedWithSeparator: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = "."
+        formatter.decimalSeparator = ","
+        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
     }
 }
 
