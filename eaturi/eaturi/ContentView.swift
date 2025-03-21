@@ -7,49 +7,6 @@
 
 import SwiftUI
 
-struct FoodItem: Identifiable {
-    let id = UUID()
-    let name: String
-    let image: String
-    let price: String
-    let calories: String
-    let protein: String
-    let carbs: String
-    let fiber: String
-    let fat: String
-}
-
-struct PopularMenu: Identifiable {
-    let id = UUID()
-    let name: String
-    let image: String
-    let price: String
-    let calories: String
-    let protein: String
-    let carbs: String
-    let fiber: String
-    let fat: String
-}
-
-
-struct MainTabView: View {
-    var body: some View {
-        TabView {
-            ContentView()
-                .tabItem {
-                    Image(systemName: "fork.knife")
-                    Text("Home")
-                }
-
-            HistoryView()
-                .tabItem {
-                    Image(systemName: "list.bullet.clipboard")
-                    Text("History")
-                }
-        }
-    }
-}
-
 struct FilterView: View {
     var onSelectFilter: ([String]) -> Void
     var selectedFilters: [String]
