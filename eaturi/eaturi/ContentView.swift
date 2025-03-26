@@ -1,25 +1,60 @@
-//
-//  ContentView.swift
-//  KasturiFoodTracker
-//
-//  Created by Grachia Uliari on 17/03/25.
-//
-
 import SwiftUI
+
+struct FoodItem: Identifiable {
+    let id = UUID()
+    let name: String
+    let image: String
+    let price: String
+    let calories: String
+    let protein: String
+    let carbs: String
+    let fiber: String
+    let fat: String
+}
+
+struct PopularMenu: Identifiable {
+    let id = UUID()
+    let name: String
+    let image: String
+    let price: String
+    let calories: String
+    let protein: String
+    let carbs: String
+    let fiber: String
+    let fat: String
+}
+
+struct MainTabView: View {
+    var body: some View {
+        TabView {
+            ContentView()
+                .tabItem {
+                    Image(systemName: "fork.knife")
+                    Text("Home")
+                }
+
+            HistoryView()
+                .tabItem {
+                    Image(systemName: "list.bullet.clipboard")
+                    Text("History")
+                }
+        }
+    }
+}
 
 struct FilterView: View {
     var onSelectFilter: ([String]) -> Void
     var selectedFilters: [String]
-    
+
     @State private var activeFilters: [String] = []
 
     let filters = ["Low Carb", "Low Calorie", "High Protein", "Low Fat", "High Fiber"]
-    
+
     init(onSelectFilter: @escaping ([String]) -> Void, selectedFilters: [String]) {
-            self.onSelectFilter = onSelectFilter
-            self.selectedFilters = selectedFilters
-            _activeFilters = State(initialValue: selectedFilters)
-        }
+        self.onSelectFilter = onSelectFilter
+        self.selectedFilters = selectedFilters
+        _activeFilters = State(initialValue: selectedFilters)
+    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -28,44 +63,211 @@ struct FilterView: View {
                 .fontWeight(.bold)
                 .padding()
 
-            ForEach(filters, id: \.self) { filter in
-                Button(action: {
-                    if activeFilters.contains(filter) {
-                        activeFilters.removeAll { $0 == filter }
-                    } else {
-                        activeFilters.append(filter)
+
+            HStack {
+                ForEach(["Low Carb", "Low Calorie", "Low Fat"], id: \.self) { filter in
+                    Button(action: {
+                        toggleFilter(filter)
+                    }) {
+                        Text(filter)
+                            .padding()
+                            .frame(height: 50)
+                            .background(activeFilters.contains(filter) ? Color.orange : Color.gray.opacity(0.1))
+                            .foregroundColor(activeFilters.contains(filter) ? .white : .black)
+                            .cornerRadius(30)
                     }
-                }) {
-                    Text(filter)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(activeFilters.contains(filter) ? Color.blue : Color.blue.opacity(0.1))
-                        .foregroundColor(activeFilters.contains(filter) ? .white : .blue)
-                        .cornerRadius(12)
                 }
             }
 
-            Button(action: {
-                onSelectFilter(activeFilters)
-            }) {
-                Text("Apply Filter")
-                    .foregroundColor(.green)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(12)
-            }
-
-            Button(action: {
-                activeFilters.removeAll()
-                onSelectFilter([])
-            }) {
-                Text("Clear Filter")
-                    .foregroundColor(.red)
-                    .padding()
+            HStack {
+                ForEach(["High Protein", "High Fiber"], id: \.self) { filter in
+                    Button(action: {
+                        toggleFilter(filter)
+                    }) {
+                        Text(filter)
+                            .padding()
+                            .frame(height: 50)
+                            .background(activeFilters.contains(filter) ? Color.orange : Color.gray.opacity(0.1))
+                            .foregroundColor(activeFilters.contains(filter) ? .white : .black)
+                            .cornerRadius(30)
+                    }
+                }
             }
 
             Spacer()
+
+            HStack {
+                Button(action: {
+                    activeFilters.removeAll()
+                    onSelectFilter([])
+                }) {
+                    Text("Clear")
+                        .foregroundColor(.gray)
+                        .padding()
+                        .frame(width: 130, height: 40)
+                }
+
+                Button(action: {
+                    onSelectFilter(activeFilters)
+                }) {
+                    Text("Apply Filter")
+                        .foregroundColor(.white)
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(width: 130, height: 40)
+                        .background(Color.orange)
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: 400, alignment: .top)
+        .background(Color.white)
+        .cornerRadius(20)
+        .presentationDetents([.height(300)])
+    }
+    
+    private func toggleFilter(_ filter: String) {
+        if activeFilters.contains(filter) {
+            activeFilters.removeAll { $0 == filter }
+        } else {
+            activeFilters.append(filter)
+        }
+    }
+}
+
+struct QuantityControl: View {
+    @Binding var quantity: Int
+    var onZeroQuantity: () -> Void
+
+    var body: some View {
+        HStack(spacing: 0) {
+            Button(action: {
+                if quantity > 1 {
+                    quantity -= 1
+                } else{
+                    onZeroQuantity()
+                }
+            }) {
+                Image(systemName: "minus")
+                    .font(.system(size: 20))
+                    .foregroundColor(.gray)
+                    .padding()
+            }
+            
+            Text("\(quantity)")
+                .font(.headline)
+                .frame(width: 30)
+            
+            Button(action: {
+                quantity += 1
+            }) {
+                Image(systemName: "plus")
+                    .font(.system(size: 20))
+                    .foregroundColor(.blue)
+                    .padding()
+            }
+        }
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+        )
+        .padding(5)
+    }
+}
+
+struct CartPopUp: View {
+    var totalCalories: Int
+    var totalPrice: Int
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Your picked food")
+                .font(.headline)
+                .foregroundStyle(.white)
+            Text("Total Calories: \(totalCalories)")
+                .foregroundStyle(.white)
+                .font(.caption)
+            Text("Total Price: Rp\(totalPrice)")
+                .foregroundStyle(.white)
+                .font(.caption)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.blue.opacity(0.9))
+        .cornerRadius(15)
+        .padding(.horizontal)
+        Spacer()
+    }
+}
+
+struct FoodDetailView: View {
+    let item: FoodItem
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        VStack {
+            Image(item.image)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .padding(.bottom, 10)
+            Text(item.name)
+                .font(.title2)
+                .fontWeight(.bold)
+            Text("Harga: \(item.price)")
+                .font(.headline)
+                .foregroundColor(.orange)
+                .padding(.top, 4)
+            
+            Text("Nutrition")
+                .font(.title3)
+                .fontWeight(.bold)
+                .padding(.bottom, 5)
+            HStack{
+                VStack{
+                    Text("Calories")
+                        .font(.caption)
+                    Text("\(item.calories)")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                .frame(width: 70, height: 100)
+                VStack{
+                    Text("Protein")
+                        .font(.caption)
+                    Text("\(item.protein)")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                .frame(width: 70, height: 100)
+                VStack{
+                    Text("Fiber")
+                        .font(.caption)
+                    Text("\(item.fiber)")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                .frame(width: 70, height: 100)
+                VStack{
+                    Text("Fat")
+                        .font(.caption)
+                    Text("\(item.fat)")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                .frame(width: 70, height: 100)
+                VStack{
+                    Text("Carbs")
+                        .font(.caption)
+                    Text("\(item.carbs)")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                .frame(width: 70, height: 100)
+            }
         }
         .padding()
         .background(Color.white)
@@ -188,23 +390,21 @@ struct ContentView: View {
             return match
         }
     }
-
     
     let categories = ["Ayam", "Telur", "Nasi", "Sayur", "Mie", "Gorengan", "Lainnya"]
     let foodItems = [
         FoodItem(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: "Rp25.000", calories: "200", protein: "30g", carbs: "10g", fiber: "30g", fat: "10g"),
-            FoodItem(name: "Nasi Goreng", image: "ayam_asam_manis", price: "Rp20.000", calories: "300", protein: "20g", carbs: "50g", fiber: "5g", fat: "15g"),
-            FoodItem(name: "Mie Goreng", image: "mie_goreng", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
-            FoodItem(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g"),
-            FoodItem(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
-            FoodItem(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g")
-        ]
+        FoodItem(name: "Nasi Goreng", image: "ayam_asam_manis", price: "Rp20.000", calories: "300", protein: "20g", carbs: "50g", fiber: "5g", fat: "15g"),
+        FoodItem(name: "Mie Goreng", image: "mie_goreng", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
+        FoodItem(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g"),
+        FoodItem(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
+        FoodItem(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g")
+    ]
     
     let popularMenus = [
         PopularMenu(name: "Telur Balado", image: "telur_balado", price: "Rp. 15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g"),
         PopularMenu(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp. 18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
         PopularMenu(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: "Rp. 25.000", calories: "200", protein: "30g", carbs: "10g", fiber: "30g", fat: "10g"),
-        
     ]
     
     let columns = [
@@ -448,10 +648,243 @@ extension Int {
         formatter.groupingSeparator = "."
         formatter.decimalSeparator = ","
         return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
+          .sheet(isPresented: $isFilterModalPresented) {
+                                FilterView(
+                                    onSelectFilter: { selectedFilters in
+                                        self.selectedFilters = selectedFilters
+                                        isFilterModalPresented = false
+                                    },
+                                    selectedFilters: selectedFilters
+                                )
+                            }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                }
+
+                ScrollViewReader { scrollProxy in
+                    ScrollView {
+                        VStack(alignment: .leading) {
+                            // Popular section ditampilkan waktu search field kosong
+                            if searchText.isEmpty {
+                                Text("Popular")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .padding(.leading, 20)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 15) {
+                                        ForEach(popularMenus) { item in
+                                            HStack {
+                                                Image(item.image)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 50, height: 50)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                                VStack(alignment: .leading, spacing: 5) {
+                                                    Text(item.name)
+                                                        .font(.headline)
+                                                        .fontWeight(.medium)
+                                                        .lineLimit(1)
+                                                    Text(item.price)
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.red)
+                                                    Text("Calories: \(item.calories)")
+                                                        .font(.caption)
+                                                        .fontWeight(.bold)
+                                                        .foregroundColor(.gray)
+                                                }
+                                                .padding(.leading, 10)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            }
+                                            .padding()
+                                            .frame(width: 200, height: 100)
+                                            .background(Color.gray.opacity(0.1))
+                                            .cornerRadius(10)
+                                        }
+                                    }
+                                    .padding(.leading, 20)
+                                    .frame(maxHeight: 120)
+                                }
+                                .padding(.bottom, 12)
+                                
+                                GeometryReader { geometry in
+                                    VStack {
+                                        Text("Category")
+                                            .font(.title2)
+                                            .fontWeight(.semibold)
+                                            .padding(.leading, 20)
+                                            .onAppear {
+                                                if geometry.frame(in: .global).minY <= 200 {
+                                                    withAnimation {
+                                                        isCategoryReached = true
+                                                    }
+                                                }
+                                            }
+                                    }
+                                }
+                                .frame(height: 30)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 15) {
+                                        ForEach(categories, id: \.self) { category in
+                                            Text(category)
+                                                .padding(.horizontal, 20)
+                                                .padding(.vertical, 10)
+                                                .background(Color.gray.opacity(0.1))
+                                                .foregroundColor(Color.black)
+                                                .cornerRadius(20)
+                                                .onTapGesture {
+                                                    print("\(category) selected")
+                                                }
+                                        }
+                                    }
+                                    .padding(.horizontal, 30)
+                                }
+                                .frame(height: 70)
+                            } else {
+                                // Show search results
+                                Text("Search Results")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .padding(.horizontal, 20)
+                                    .padding(.top, 10)
+                            }
+                            
+                            // No results text
+                            if !searchText.isEmpty && filteredFoodItems.isEmpty {
+                                VStack(spacing: 20) {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.system(size: 50))
+                                        .foregroundColor(.gray)
+                                    Text("No menu items found for \"\(searchText)\"")
+                                        .font(.headline)
+                                        .multilineTextAlignment(.center)
+                                    Text("Try a different search term or clear the search field")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.top, 50)
+                            } else {
+                                // Always show food grid (filtered when searching)
+                                ScrollView {
+                                    LazyVGrid(columns: columns, spacing: 17) {
+                                        ForEach(filteredFoodItems) { item in
+                                            VStack(alignment: .leading, spacing: 3) {
+                                                ZStack(alignment: .bottomTrailing) {
+                                                    Image(item.image)
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 160, height: 160)
+                                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                                        .onTapGesture {
+                                                                                        selectedFoodItem = item
+                                                                                        showDetailModal = true
+                                                                                    }
+
+                                                    if let quantity = cartItems[item.id] {
+                                                        HStack(spacing: 5) {
+                                                            Button(action: {
+                                                                if quantity > 1 {
+                                                                    cartItems[item.id] = quantity - 1
+                                                                } else {
+                                                                    cartItems.removeValue(forKey: item.id)
+                                                                    if cartItems.isEmpty {
+                                                                        isCartVisible = false
+                                                                    }
+                                                                }
+                                                            }) {
+                                                                Image(systemName: "minus")
+                                                                    .padding(6)
+                                                                    .background(Color.white)
+                                                                    .clipShape(Circle())
+                                                                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                                                            }
+
+                                                            Text("\(quantity)")
+                                                                .font(.headline)
+
+                                                            Button(action: {
+                                                                cartItems[item.id] = quantity + 1
+                                                            }) {
+                                                                Image(systemName: "plus")
+                                                                    .padding(6)
+                                                                    .background(Color.white)
+                                                                    .clipShape(Circle())
+                                                                    .overlay(Circle().stroke(Color.blue, lineWidth: 1))
+                                                            }
+                                                        }
+                                                        .padding(4)
+                                                        .background(Color.white)
+                                                        .cornerRadius(30)
+                                                        .padding(4)
+                                                    } else {
+                                                        Button(action: {
+                                                            cartItems[item.id] = 1
+                                                            isCartVisible = true
+                                                        }) {
+                                                            Image(systemName: "plus")
+                                                                .padding(10)
+                                                                .background(Color.blue)
+                                                                .foregroundColor(.white)
+                                                                .clipShape(Circle())
+                                                                .padding(8)
+                                                        }
+                                                    }
+                                                }
+
+                                                Text(item.name)
+                                                    .font(.subheadline)
+                                                    .fontWeight(.medium)
+                                                    .lineLimit(1)
+
+                                                Text(item.price)
+                                                    .font(.headline)
+                                                    .fontWeight(.bold)
+                                                
+                                                Text("Calories: \(item.calories)")
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.red)
+                                            }
+                                            .frame(width: 164)
+                                            .background(Color.white)
+                                            .cornerRadius(12)
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                                .sheet(isPresented: $showDetailModal) {
+                                    if let item = selectedFoodItem {
+                                        FoodDetailView(item: item, isPresented: $showDetailModal)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+                
+            if isCartVisible && !cartItems.isEmpty {
+                VStack {
+                    CartPopUp(totalCalories: totalCalories, totalPrice: totalPrice)
+                        .padding(.top, 10)
+                }
+                .frame(maxHeight: .infinity, alignment: .bottom)
+            }
+        }
+    }
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
 #Preview {
-//    ContentView()
     MainTabView()
 }
