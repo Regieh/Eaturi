@@ -59,8 +59,8 @@ struct CartView: View {
                         
                         HStack(spacing: 10) {
                             nutritionItem(icon: "drop.fill", value: "\(totalFat)g", label: "Fat", bgColor: Color.blue.opacity(0.1), textColor: .blue)
-                            nutritionItem(icon: "heart.fill", value: "\(totalProtein)g", label: "Protein", bgColor: Color.red.opacity(0.1), textColor: .red)
-                            nutritionItem(icon: "fork.knife.circle.fill", value: "\(totalCarbs)g", label: "Carbs", bgColor: Color.yellow.opacity(0.1), textColor: .orange)
+                            nutritionItem(icon: "fish.fill", value: "\(totalProtein)g", label: "Protein", bgColor: Color.red.opacity(0.1), textColor: .red)
+                            nutritionItem(icon: "laurel.trailing", value: "\(totalCarbs)g", label: "Carbs", bgColor: Color.yellow.opacity(0.1), textColor: .orange)
                             nutritionItem(icon: "leaf.fill", value: "\(totalFiber)g", label: "Fiber", bgColor: Color.green.opacity(0.1), textColor: .green)
                         }
                     }
@@ -96,7 +96,7 @@ struct CartView: View {
                     Button(action: {
                         saveToHistory()
                     }) {
-                        Text("Log my meal")
+                        Text("Log my lunch")
                             .font(.headline)
                             .foregroundColor(.white)
                             .padding()
@@ -110,8 +110,8 @@ struct CartView: View {
                 .padding(.bottom)
             }
         }
-//        .navigationTitle("My Meal")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("My lunch")
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     
@@ -226,7 +226,7 @@ struct CartItemView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     HStack(spacing: 3) {
-                        Image(systemName: "heart.fill")
+                        Image(systemName: "fish.fill")
                         Text("\(item.protein)g")
                     }
                     .font(.footnote)
@@ -236,7 +236,7 @@ struct CartItemView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     HStack(spacing: 3) {
-                        Image(systemName: "fork.knife.circle.fill")
+                        Image(systemName: "laurel.trailing")
                         Text("\(item.carbs)g")
                     }
                     .font(.footnote)

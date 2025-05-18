@@ -13,7 +13,7 @@ struct ResultFilterBar: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
+            HStack(spacing: 0) {
                 ForEach(selectedFilters, id: \.self) { filter in
                     HStack(spacing: 4) {
                         Text(filter)
@@ -44,10 +44,11 @@ struct ResultFilterBar: View {
                                 .stroke(Color("colorOren"), lineWidth: 2)
                         )
                 )
-                .padding()
+                .padding(.horizontal, 8)
                 .frame(height: 40)
             }
         }
+        .padding(.horizontal, 15)
     }
 }
     

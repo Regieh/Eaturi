@@ -11,9 +11,9 @@ struct HistoryCardView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with meal type
             Text("Lunch Logged")
-                .font(.headline)
-                .foregroundColor(.black)
-                .padding(.horizontal)
+                .font(.title3)
+                .fontWeight(.bold)
+                .padding(.leading, 20)
 
             // Show each food item once with its quantity
             ForEach(Array(record.cart.keys), id: \.self) { productID in
@@ -40,7 +40,6 @@ struct HistoryCardView: View {
                 Spacer()
             }
         }
-        .padding()
     }
 
     private let dateFormatter: DateFormatter = {
@@ -74,8 +73,8 @@ struct MealCardView: View {
                 // Nutrient Info
                 HStack(spacing: 6) {
                     nutrientChip(icon: "drop.fill", value: food.fat * quantity, color: .blue)
-                    nutrientChip(icon: "heart.fill", value: food.protein * quantity, color: .red)
-                    nutrientChip(icon: "fork.knife.circle.fill", value: food.carbs * quantity, color: .orange)
+                    nutrientChip(icon: "fish.fill", value: food.protein * quantity, color: .red)
+                    nutrientChip(icon: "laurel.trailing", value: food.carbs * quantity, color: .orange)
                     nutrientChip(icon: "leaf.fill", value: food.fiber * quantity, color: .green)
                 }
 

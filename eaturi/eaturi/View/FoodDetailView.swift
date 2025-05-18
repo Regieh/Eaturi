@@ -132,14 +132,14 @@ struct FoodDetailView: View {
                     textColor: .blue
                 )
                 nutritionItem(
-                    icon: "heart.fill",
+                    icon: "fish.fill",
                     value: "\(adjustedProtein.clean)g",
                     label: "Protein",
                     bgColor: Color.red.opacity(0.1),
                     textColor: .red
                     )
                 nutritionItem(
-                    icon: "fork.knife.circle.fill",
+                    icon: "laurel.trailing",
                     value: "\(adjustedCarbs.clean)g",
                     label: "Carbs",
                     bgColor: Color.yellow.opacity(0.1),

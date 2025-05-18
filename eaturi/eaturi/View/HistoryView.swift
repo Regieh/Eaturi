@@ -104,10 +104,10 @@ struct HistoryView: View {
                         nutritionItem(icon: "drop.fill",
                                       value: "\(totalFat)g", label: "Fat",
                                       bg: Color.blue.opacity(0.1), fg: .blue)
-                        nutritionItem(icon: "heart.fill",
+                        nutritionItem(icon: "fish.fill",
                                       value: "\(totalProtein)g", label: "Protein",
                                       bg: Color.red.opacity(0.1), fg: .red)
-                        nutritionItem(icon: "fork.knife.circle.fill",
+                        nutritionItem(icon: "laurel.trailing",
                                       value: "\(totalCarbs)g", label: "Carbs",
                                       bg: Color.yellow.opacity(0.1), fg: .orange)
                         nutritionItem(icon: "leaf.fill",
@@ -200,15 +200,25 @@ struct HistoryView: View {
     }
 }
 
-// MARK: – Preview
+//// MARK: – Preview
+//#Preview {
+//    do {
+//        let previewer = try Previewer()
+//        return HistoryView(
+//            onPickAgain: { _ in }
+//        )
+//        .modelContainer(previewer.container)
+//    } catch {
+//        return Text("Preview error: \(error.localizedDescription)")
+//    }
+//}
+
 #Preview {
     do {
         let previewer = try Previewer()
-        return HistoryView(
-            onPickAgain: { _ in }
-        )
-        .modelContainer(previewer.container)
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
     } catch {
-        return Text("Preview error: \(error.localizedDescription)")
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }

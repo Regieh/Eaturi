@@ -403,7 +403,7 @@ struct FoodItemCell: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     HStack(spacing: 3) {
-                        Image(systemName: "heart.fill")
+                        Image(systemName: "fish.fill")
                         Text("\(item.protein)g")
                     }
                     .font(.footnote)
@@ -413,7 +413,7 @@ struct FoodItemCell: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     HStack(spacing: 3) {
-                        Image(systemName: "fork.knife.circle.fill")
+                        Image(systemName: "laurel.trailing")
                         Text("\(item.carbs)g")
                     }
                     .font(.footnote)
