@@ -6,9 +6,48 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EEF44B682DDA34EC00AEBFDD /* EaturiStreakIntents.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = EEF44B5F2DDA34EC00AEBFDD /* EaturiStreakIntents.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EEF44B662DDA34EC00AEBFDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EBF5B0D2D8BC6D200994724 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EEF44B5E2DDA34EC00AEBFDD;
+			remoteInfo = EaturiStreakIntents;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EEF44B6D2DDA34EC00AEBFDD /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				EEF44B682DDA34EC00AEBFDD /* EaturiStreakIntents.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4EC1B3322DA35801007138A7 /* eaturi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eaturi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EEF44B5F2DDA34EC00AEBFDD /* EaturiStreakIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = EaturiStreakIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EEF44B692DDA34EC00AEBFDD /* Exceptions for "EaturiStreakIntents" folder in "EaturiStreakIntents" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EEF44B5E2DDA34EC00AEBFDD /* EaturiStreakIntents */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4EBF5B172D8BC6D200994724 /* eaturi */ = {
@@ -16,10 +55,25 @@
 			path = eaturi;
 			sourceTree = "<group>";
 		};
+		EEF44B602DDA34EC00AEBFDD /* EaturiStreakIntents */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EEF44B692DDA34EC00AEBFDD /* Exceptions for "EaturiStreakIntents" folder in "EaturiStreakIntents" target */,
+			);
+			path = EaturiStreakIntents;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4EBF5B122D8BC6D200994724 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EEF44B5C2DDA34EC00AEBFDD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -34,6 +88,8 @@
 			children = (
 				4EBF5B172D8BC6D200994724 /* eaturi */,
 				4EC1B3322DA35801007138A7 /* eaturi.app */,
+				EEF44B5F2DDA34EC00AEBFDD /* EaturiStreakIntents.appex */,
+				EEF44B602DDA34EC00AEBFDD /* EaturiStreakIntents */,
 			);
 			sourceTree = "<group>";
 		};
@@ -47,10 +103,12 @@
 				4EBF5B112D8BC6D200994724 /* Sources */,
 				4EBF5B122D8BC6D200994724 /* Frameworks */,
 				4EBF5B132D8BC6D200994724 /* Resources */,
+				EEF44B6D2DDA34EC00AEBFDD /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EEF44B672DDA34EC00AEBFDD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4EBF5B172D8BC6D200994724 /* eaturi */,
@@ -62,6 +120,28 @@
 			productReference = 4EC1B3322DA35801007138A7 /* eaturi.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EEF44B5E2DDA34EC00AEBFDD /* EaturiStreakIntents */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EEF44B6A2DDA34EC00AEBFDD /* Build configuration list for PBXNativeTarget "EaturiStreakIntents" */;
+			buildPhases = (
+				EEF44B5B2DDA34EC00AEBFDD /* Sources */,
+				EEF44B5C2DDA34EC00AEBFDD /* Frameworks */,
+				EEF44B5D2DDA34EC00AEBFDD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EEF44B602DDA34EC00AEBFDD /* EaturiStreakIntents */,
+			);
+			name = EaturiStreakIntents;
+			packageProductDependencies = (
+			);
+			productName = EaturiStreakIntents;
+			productReference = EEF44B5F2DDA34EC00AEBFDD /* EaturiStreakIntents.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -69,11 +149,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					4EBF5B142D8BC6D200994724 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					EEF44B5E2DDA34EC00AEBFDD = {
+						CreatedOnToolsVersion = 16.3;
 					};
 				};
 			};
@@ -92,12 +175,20 @@
 			projectRoot = "";
 			targets = (
 				4EBF5B142D8BC6D200994724 /* eaturi */,
+				EEF44B5E2DDA34EC00AEBFDD /* EaturiStreakIntents */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4EBF5B132D8BC6D200994724 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EEF44B5D2DDA34EC00AEBFDD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -114,7 +205,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EEF44B5B2DDA34EC00AEBFDD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EEF44B672DDA34EC00AEBFDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EEF44B5E2DDA34EC00AEBFDD /* EaturiStreakIntents */;
+			targetProxy = EEF44B662DDA34EC00AEBFDD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4EBF5B212D8BC6D200994724 /* Debug */ = {
@@ -264,7 +370,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi;
+				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi.flav;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -299,9 +405,65 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi;
+				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi.flav;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EEF44B6B2DDA34EC00AEBFDD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EaturiStreakIntents/EaturiStreakIntents.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KZJGJDZM23;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EaturiStreakIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EaturiStreakIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi.flav.EaturiStreakIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EEF44B6C2DDA34EC00AEBFDD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EaturiStreakIntents/EaturiStreakIntents.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KZJGJDZM23;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EaturiStreakIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EaturiStreakIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi.flav.EaturiStreakIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -325,6 +487,15 @@
 			buildConfigurations = (
 				4EBF5B242D8BC6D200994724 /* Debug */,
 				4EBF5B252D8BC6D200994724 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EEF44B6A2DDA34EC00AEBFDD /* Build configuration list for PBXNativeTarget "EaturiStreakIntents" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EEF44B6B2DDA34EC00AEBFDD /* Debug */,
+				EEF44B6C2DDA34EC00AEBFDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

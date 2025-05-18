@@ -34,7 +34,7 @@ final class StreakManager: ObservableObject {
     ///   - store: The UserDefaults store to use (default is custom suite or standard).
     ///   - calendar: Calendar for date calculations (default is `.current`).
     init(
-        store: UserDefaults = UserDefaults(suiteName: "com.eaturi.streak") ?? .standard,
+        store: UserDefaults = UserDefaults(suiteName: "group.com.core.challenge.eaturi") ?? .standard,
         calendar: Calendar = .current
     ) {
         self.store = store
