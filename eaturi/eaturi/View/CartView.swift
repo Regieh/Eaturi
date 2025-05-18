@@ -7,6 +7,7 @@ struct CartView: View {
     var foodItems: [FoodModel]
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    @EnvironmentObject private var streakManager: StreakManager
     let healthManager = HealthManager()
     
     @Binding var selectedTab: Int
@@ -158,9 +159,11 @@ struct CartView: View {
         }
     }
     
+    // MARK: – Save & log meal
     private func saveToHistory() {
-        print("Saving to history...")
+        print("Saving to history…")
         
+        // 1. Build a lookup table for price & macros
         let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
             result[item.id] = (
                 item.price,
@@ -172,27 +175,32 @@ struct CartView: View {
             )
         }
         
+        // 2. Persist HistoryRecord(s)
         HistoryManager.saveOrderHistory(
             cart: cartItems,
             modelContext: modelContext,
             foodData: foodData
         )
         
-        healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
-        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
-        healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
-        healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
-        healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
+        // 3. Increment streak *now* (meal officially logged)
+        streakManager.registerMealLogged()
         
+        // 4. Write nutrition summary to HealthKit
+        healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(),         typeIdentifier: .dietaryEnergyConsumed)
+        healthManager.saveNutrition(value: Double(totalFat),      unit: .gram(),                typeIdentifier: .dietaryFatTotal)
+        healthManager.saveNutrition(value: Double(totalCarbs),    unit: .gram(),                typeIdentifier: .dietaryCarbohydrates)
+        healthManager.saveNutrition(value: Double(totalFiber),    unit: .gram(),                typeIdentifier: .dietaryFiber)
+        healthManager.saveNutrition(value: Double(totalProtein),  unit: .gram(),                typeIdentifier: .dietaryProtein)
+        
+        // 5. Clean-up UI
         cartItems.removeAll()
-        
-        // Switch to History tab (index 1) before dismissing
-        selectedTab = 1
-        dismiss()
+        selectedTab = 1        // switch to History tab
+        dismiss()              // close the sheet / view
         
         print("Save completed")
     }
 }
+
 
 struct CartItemView: View {
     var item: FoodModel

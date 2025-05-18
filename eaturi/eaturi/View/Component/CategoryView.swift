@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct CategoryView: View {
+    
+    @EnvironmentObject private var streakManager: StreakManager
+    
     @Binding var searchText: String
     @Binding var isCategoryReached: Bool
     @Binding var categoryModels: [CategoryModel]
@@ -404,9 +407,10 @@ struct FoodItemCell: View {
                     
                     HStack(spacing: 3) {
                         Image(systemName: "fish.fill")
+                            .font(.caption)
                         Text("\(item.protein)g")
+                            .font(.footnote)
                     }
-                    .font(.footnote)
                     .padding(5)
                     .background(Color.red.opacity(0.10))
                     .foregroundColor(.red)

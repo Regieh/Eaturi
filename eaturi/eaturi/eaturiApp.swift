@@ -4,32 +4,41 @@ import HealthKit
 
 @main
 struct eaturiApp: App {
-    let sharedModelContainer: ModelContainer = createContainer()
+    // Shared SwiftData model container
+    let sharedModelContainer: ModelContainer = Self.createContainer()
+    // HealthKit manager instance
     let healthManager = HealthManager()
     
+    // Shared StreakManager observable object
+    @StateObject private var streakManager = StreakManager()
+    
     init() {
+        // Request HealthKit authorization on app launch
         healthManager.requestAuthorization()
         
+        // Customize UINavigationBar appearance globally
         let appearance = UINavigationBarAppearance()
-               appearance.configureWithTransparentBackground()
-               appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-               appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-               
-               UINavigationBar.appearance().standardAppearance = appearance
-               UINavigationBar.appearance().scrollEdgeAppearance = appearance
-               UINavigationBar.appearance().compactAppearance = appearance
-               UINavigationBar.appearance().tintColor = .black
+        appearance.configureWithTransparentBackground()
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().tintColor = .black
     }
 
     var body: some Scene {
         WindowGroup {
             MainTabView(cartItems: [:])
+                .environmentObject(streakManager)  // Inject StreakManager environment object
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(sharedModelContainer)  // Inject SwiftData container
     }
 
     @MainActor
     static func createContainer() -> ModelContainer {
+        // Define your data model schema here
         let schema = Schema([
             HistoryRecord.self,
             FoodModel.self
@@ -38,22 +47,22 @@ struct eaturiApp: App {
 
         do {
             let container = try ModelContainer(for: schema, configurations: [configuration])
-            var foodFetchDescriptor = FetchDescriptor<FoodModel>()
-            foodFetchDescriptor.fetchLimit = 1
 
+            // Check if FoodModel data exists; if not, seed from JSON
+            let foodFetchDescriptor = FetchDescriptor<FoodModel>()
             let existingFoodItems = try container.mainContext.fetch(foodFetchDescriptor)
 
             if existingFoodItems.isEmpty {
                 print("FoodModel database is empty. Seeding sample data from JSON...")
-                let itemsToSeed = loadFoodData() // Use the JSON loading function
+                let itemsToSeed = loadFoodData()
                 if itemsToSeed.isEmpty {
                     print("Warning: No items loaded from JSON. Database will remain empty.")
                 } else {
                     for item in itemsToSeed {
                         container.mainContext.insert(item)
                     }
-                    try? container.mainContext.save()
-                    print("FoodModel sample data seeded successfully. Loaded \(itemsToSeed.count) items.")
+                    try container.mainContext.save()
+                    print("FoodModel sample data seeded successfully with \(itemsToSeed.count) items.")
                 }
             } else {
                 print("FoodModel database already contains data.")
@@ -66,7 +75,8 @@ struct eaturiApp: App {
     }
 }
 
-// Function to load JSON from foodData.json (defined outside the App struct)
+/// Loads FoodModel data from foodData.json bundled with the app.
+/// - Returns: Array of FoodModel objects or empty array on failure.
 func loadFoodData() -> [FoodModel] {
     guard let url = Bundle.main.url(forResource: "foodData", withExtension: "json") else {
         print("Error: Could not find foodData.json in bundle")

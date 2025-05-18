@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    // MARK: - Environment
+    @EnvironmentObject var streakManager: StreakManager
+    
     // MARK: - Properties
     @State private var searchText = ""
     @State private var isFilterModalPresented = false
@@ -12,12 +15,14 @@ struct ContentView: View {
     @State private var selectedFoodItem: FoodModel?
     @State private var showDetailModal = false
     @State private var navigationPath = NavigationPath()
+    @State private var showStreakModal = false
+    
     @Binding var foodItems: [FoodModel]
     @Binding var selectedTab: Int
     @Binding var shouldNavigateToCart: Bool
+    
     // MARK: - Computed Properties
     
-    // Calculate nutritional totals
     private var nutritionTotals: (calories: Int, protein: Int, fat: Int, carbs: Int, fiber: Int, price: Int) {
         cartItems.reduce((0, 0, 0, 0, 0, 0)) { totals, entry in
             guard let item = foodItems.first(where: { $0.id == entry.key }) else {
@@ -48,6 +53,7 @@ struct ContentView: View {
     }
     
     // MARK: - Body
+    
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
@@ -58,16 +64,17 @@ struct ContentView: View {
                     
                     ScrollViewReader { scrollProxy in
                         ScrollView {
-                            CategoryView(searchText: $searchText,
-                                         isCategoryReached: $isCategoryReached,
-                                         categoryModels: $categoryModels,
-                                         foodItems: .constant(sortedFoodItems),
-                                         //                                           foodItems: $foodItems,
-                                         selectedFilters: $selectedFilters,
-                                         selectedFoodItem: $selectedFoodItem,
-                                         showDetailModal: $showDetailModal,
-                                         cartItems: $cartItems,
-                                         isCartVisible: $isCartVisible)
+                            CategoryView(
+                                searchText: $searchText,
+                                isCategoryReached: $isCategoryReached,
+                                categoryModels: $categoryModels,
+                                foodItems: .constant(sortedFoodItems),
+                                selectedFilters: $selectedFilters,
+                                selectedFoodItem: $selectedFoodItem,
+                                showDetailModal: $showDetailModal,
+                                cartItems: $cartItems,
+                                isCartVisible: $isCartVisible
+                            )
                         }
                     }
                 }
@@ -81,14 +88,18 @@ struct ContentView: View {
                     .padding(.bottom, 15)
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-                
+            }
+            .onChange(of: cartItems) { newCart in
+                if !newCart.isEmpty {
+                    streakManager.registerMealLogged()
+                }
             }
             .navigationDestination(for: String.self) { destination in
                 if destination == "cart" {
                     CartView(
                         cartItems: $cartItems,
                         foodItems: foodItems,
-                        selectedTab: $selectedTab  // Pass the binding here
+                        selectedTab: $selectedTab
                     )
                 }
             }
@@ -104,27 +115,50 @@ struct ContentView: View {
     
     private var headerSection: some View {
         VStack(alignment: .leading) {
-            Text("Let Eaturi do Your")
-                .font(.system(.title, design: .default))
-                .dynamicTypeSize(.xSmall...(.accessibility5))
-                .foregroundColor(Color.black)
-                .fontWeight(.bold)
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Let Eaturi do Your")
+                        .font(.system(.title, design: .default))
+                        .dynamicTypeSize(.xSmall...(.accessibility5))
+                        .foregroundColor(Color.black)
+                        .fontWeight(.bold)
+                        .padding(.top, 10)
+                    
+                    Text("Calcu-lunching.")
+                        .font(.system(.title, design: .default))
+                        .dynamicTypeSize(.xSmall...(.accessibility5))
+                        .foregroundColor(Color.black)
+                        .fontWeight(.bold)
+                }
                 .padding(.leading, 30)
-                .padding(.top, 10)
+                
+                Spacer()
+                
+                Button {
+                    showStreakModal = true
+                } label: {
+                    StreakBadge(count: streakManager.currentStreak)
+                }
+                .buttonStyle(.plain)
+                .padding(.trailing, 24)
+            }
+            .sheet(isPresented: $showStreakModal) {
+                StreakDetailView()
+                    .environmentObject(streakManager)
+                    .presentationDetents([.fraction(0.999)])
+                    .presentationCornerRadius(40)
+                    .presentationDragIndicator(.visible)
+                    .interactiveDismissDisabled(false)
+            }
             
-            Text("Calcu-lunching.")
-                .font(.system(.title, design: .default))
-                .dynamicTypeSize(.xSmall...(.accessibility5))
-                .foregroundColor(Color.black)
-                .fontWeight(.bold)
-                .padding(.leading, 30)
-        
-            
-            SearchBar(searchText: $searchText, isFilterModalPresented: $isFilterModalPresented, selectedFilters: $selectedFilters)
+            SearchBar(
+                searchText: $searchText,
+                isFilterModalPresented: $isFilterModalPresented,
+                selectedFilters: $selectedFilters
+            )
         }
-        //                    .padding(.top, 20)
         .safeAreaInset(edge: .top) {
-            Color.clear.frame(height: 60) // buat spasi aman untuk notch
+            Color.clear.frame(height: 60)
         }
     }
     
@@ -143,22 +177,26 @@ struct ContentView: View {
             }
         }
     }
-    
 }
 
 // MARK: - Preference Key
+
 struct ScrollOffsetPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
+    
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     do {
         let previewer = try Previewer()
         return MainTabView(cartItems: [:])
             .modelContainer(previewer.container)
+            .environmentObject(StreakManager()) // Add environmentObject for preview
     } catch {
         return Text("Preview Error: \(error.localizedDescription)")
     }
