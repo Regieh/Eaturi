@@ -51,7 +51,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
-                backgroundGradient
+                background
                 
                 VStack {
                     headerSection
@@ -74,12 +74,13 @@ struct ContentView: View {
                 
                 // Cart popup
                 if isCartVisible && !cartItems.isEmpty {
-                    CartPopUp(cartItems: $cartItems, foodItems: $foodItems) {
+                    CartPopUp(cartItems: $cartItems, foodItems: $foodItems, isCartVisible: $isCartVisible) {
                         shouldNavigateToCart = true
                     }
                     .padding(.top, 10)
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
+                
             }
             .navigationDestination(for: String.self) { destination in
                 if destination == "cart" {
@@ -95,40 +96,28 @@ struct ContentView: View {
     
     // MARK: - Subviews
     
-    private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(stops: [
-                .init(color: Color("colorSecondary"), location: 0.0),
-                .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
-                .init(color: Color("abubg"), location: 0.6)
-            ]),
-            startPoint: .topTrailing,
-            endPoint: .bottom
-        )
-        .edgesIgnoringSafeArea(.all)
+    private var background: some View {
+        Color("colorBackground")
+            .edgesIgnoringSafeArea(.all)
     }
     
     private var headerSection: some View {
         VStack(alignment: .leading) {
-            Text("Let's Start a")
-                .font(.system(.largeTitle, design: .default))
+            Text("Let Eaturi do Your")
+                .font(.system(.title, design: .default))
                 .dynamicTypeSize(.xSmall...(.accessibility5))
-                .foregroundColor(Color("BlackGray"))
+                .foregroundColor(Color.black)
                 .fontWeight(.bold)
                 .padding(.leading, 30)
                 .padding(.top, 10)
-            HStack (spacing:0){
-                Text("Healthy")
-                    .font(.largeTitle)
-                    .foregroundColor(Color("colorPrimary"))
-                    .fontWeight(.bold)
-                    .padding(.leading, 30)
-                Text("Lifestyle")
-                    .font(.largeTitle)
-                    .foregroundColor(Color("BlackGray"))
-                    .fontWeight(.bold)
-                    .padding(.leading, 10)
-            }
+            
+            Text("Calcu-lunching.")
+                .font(.system(.title, design: .default))
+                .dynamicTypeSize(.xSmall...(.accessibility5))
+                .foregroundColor(Color.black)
+                .fontWeight(.bold)
+                .padding(.leading, 30)
+        
             
             SearchBar(searchText: $searchText, isFilterModalPresented: $isFilterModalPresented, selectedFilters: $selectedFilters)
         }

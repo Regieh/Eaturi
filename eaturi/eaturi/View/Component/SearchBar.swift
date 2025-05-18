@@ -38,10 +38,14 @@ struct SearchBar: View {
                     isFilterModalPresented.toggle()
                 }
             }) {
-                Image(systemName: "slider.horizontal.3")
+                Image(systemName: "slider.vertical.3")
+                    .foregroundColor(.white)
                     .symbolVariant(.fill)
                     .font(.system(size: 26, weight: .bold))
-                    .foregroundColor(Color("colorPrimary"))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 8)
+                    .background(Color("colorOren"))
+                    .cornerRadius(10)
             }
             .sheet(isPresented: $isFilterModalPresented) {
                 FilterView(
@@ -57,3 +61,14 @@ struct SearchBar: View {
         .padding(.bottom, 10)
     }
 }
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
+}
+

@@ -4,13 +4,15 @@ struct FoodDetailView: View {
     // MARK: - Properties
     let item: FoodModel
     let isAvailableToday: Bool
-
+    
     @Binding var isPresented: Bool
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     @Binding var showDetailModal: Bool
-    @State private var quantity: Int = 0
-    @State private var initialQuantity: Int = 0
+    
+    @State private var quantity: Int = 1
+    @State private var initialQuantity: Int = 1
+    @State private var selectedServingSize: String = "1 serving"
     
     // MARK: - Initialization
     init(item: FoodModel,
@@ -25,11 +27,7 @@ struct FoodDetailView: View {
         _isCartVisible = isCartVisible
         _showDetailModal = showDetailModal
         self.isAvailableToday = isAvailableToday
-        let initialValue = cartItems.wrappedValue[item.id] ?? 0
-        _quantity = State(initialValue: initialValue)
-        _initialQuantity = State(initialValue: initialValue)
     }
-
     
     // MARK: - Body
     var body: some View {
@@ -37,23 +35,41 @@ struct FoodDetailView: View {
             foodImageView
             detailsSection
             nutritionSection
+            servingSizeSelection
             actionButtons
         }
         .padding(.horizontal, 20)
-        .background(Color.white)
+        .padding(.bottom, 6)
         .cornerRadius(20)
-        .presentationDetents([.medium])
+        .background(Color("colorBackground")).edgesIgnoringSafeArea(.all)
         .onTapGesture {
             isPresented = false
             showDetailModal = false
         }
         .onAppear {
-            let initialValue = cartItems[item.id] ?? 0
+            let initialValue = cartItems[item.id] ?? 1
             quantity = initialValue
             initialQuantity = initialValue
         }
         .grayscale(isAvailableToday ? 0 : 1)
         .opacity(isAvailableToday ? 1 : 0.7)
+    }
+    
+    // MARK: - Computed Nutrition Values
+    private var adjustedCalories: Int {
+        selectedServingSize == "1 serving" ? item.calories : item.calories / 2
+    }
+    private var adjustedFat: Double {
+        selectedServingSize == "1 serving" ? Double(item.fat) : Double(item.fat) / 2
+    }
+    private var adjustedProtein: Double {
+        selectedServingSize == "1 serving" ? Double(item.protein) : Double(item.protein) / 2
+    }
+    private var adjustedCarbs: Double {
+        selectedServingSize == "1 serving" ? Double(item.carbs) : Double(item.carbs) / 2
+    }
+    private var adjustedFiber: Double {
+        selectedServingSize == "1 serving" ? Double(item.fiber) : Double(item.fiber) / 2
     }
     
     // MARK: - Subviews
@@ -63,11 +79,11 @@ struct FoodDetailView: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: geometry.size.width * 0.98, height: 240)
-                .clipShape(RoundedRectangle(cornerRadius: 25))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
                 .padding(.top, 20)
                 .position(x: geometry.size.width / 2, y: 240 / 2 + 20)
-//                .saturation(isAvailableToday ? 1 : 0)
-//                .opacity(isAvailableToday ? 1 : 0.5)
+                .saturation(isAvailableToday ? 1 : 0)
+                .opacity(isAvailableToday ? 1 : 0.5)
         }
         .frame(height: 260)
     }
@@ -82,37 +98,64 @@ struct FoodDetailView: View {
             Text(item.foodDescription)
                 .font(.body)
                 .foregroundStyle(.abu)
-            
-            Text("Rp\(item.price)")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundColor(.colorPrimary)
         }
     }
     
     private var nutritionSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Nutrition")
                 .font(.body)
                 .fontWeight(.semibold)
                 .foregroundStyle(.newblek)
             
-            HStack{
-                nutritionItem(icon: "flame.fill", value: "\(item.calories)", label: "Calories", color: .orange)
-                separator()
-                nutritionItem(icon: "circle.hexagongrid.fill", value: "\(item.fat) g", label: "Fat", color: .yellow)
-                separator()
-                nutritionItem(icon: "bolt.fill", value: "\(item.protein) g", label: "Protein", color: .red)
-                separator()
-                nutritionItem(icon: "chart.pie.fill", value: "\(item.carbs) g", label: "Carbs", color: .blue)
-                separator()
-                nutritionItem(icon: "leaf.fill", value: "\(item.fiber) g", label: "Fiber", color: .green)
+            HStack(spacing: 4) {
+                Text("Calories")
+                    .font(.subheadline)
+                    .foregroundColor(.orange)
+                Spacer()
+                Text("\(adjustedCalories)")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.orange)
             }
-            .padding(.vertical, 16)
-            .padding(.horizontal, 10)
-            .background(Color.white)
-            .cornerRadius(20)
-            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.orange.opacity(0.1))
+            .cornerRadius(15)
+            
+            HStack(spacing: 10) {
+                nutritionItem(
+                    icon: "drop.fill",
+                    value: "\(adjustedFat.clean)g",
+                    label: "Fat",
+                    bgColor: Color.blue.opacity(0.1),
+                    textColor: .blue
+                )
+                nutritionItem(
+                    icon: "heart.fill",
+                    value: "\(adjustedProtein.clean)g",
+                    label: "Protein",
+                    bgColor: Color.red.opacity(0.1),
+                    textColor: .red
+                    )
+                nutritionItem(
+                    icon: "fork.knife.circle.fill",
+                    value: "\(adjustedCarbs.clean)g",
+                    label: "Carbs",
+                    bgColor: Color.yellow.opacity(0.1),
+                    textColor: .orange
+                )
+
+                nutritionItem(
+                    icon: "leaf.fill",
+                    value: "\(adjustedFiber.clean)g",
+                    label: "Fiber",
+                    bgColor: Color.green.opacity(0.1),
+                    textColor: .green
+                )
+
+            }
+            .frame(maxWidth: .infinity)
         }
     }
     
@@ -125,24 +168,24 @@ struct FoodDetailView: View {
                         quantity += 1
                     },
                     onDecrement: {
-                        if quantity > 0 {
+                        if quantity > 1 {
                             quantity -= 1
                         }
                     },
-                    buttonSize: 40,
+                    buttonSize: 35,
                     iconSize: 15,
                     fontSize: 25
                 )
                 .padding(.vertical, 10)
-                .foregroundStyle(Color("newblek"))
-
+                .foregroundStyle(Color.black)
+                
                 Button(action: addToCart) {
                     Text(buttonText)
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
                         .frame(width: 220, height: 50)
-                        .background(Color.colorPrimary)
+                        .background(quantity > 0 ? Color.colorPrimary : Color.gray)
                         .cornerRadius(100)
                 }
                 .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
@@ -163,14 +206,12 @@ struct FoodDetailView: View {
         }
         .padding(.bottom, 20)
     }
-
-    // Computed property to determine button text
+    
     private var buttonText: String {
-        print("initialQuantity: \(initialQuantity), quantity: \(quantity)")
         if initialQuantity >= 0 && quantity != initialQuantity {
-            return "Update MyLunch"
+            return "Add this food"
         } else {
-            return "Add to MyLunch"
+            return "Add this food"
         }
     }
     
@@ -179,37 +220,95 @@ struct FoodDetailView: View {
         if quantity > 0 {
             cartItems[item.id] = quantity
             isCartVisible = true
-            isPresented = false
-            showDetailModal = false
         } else {
             cartItems.removeValue(forKey: item.id)
-            isPresented = false
-            showDetailModal = false
         }
+        isPresented = false
+        showDetailModal = false
     }
     
-    private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
-        VStack {
-            Image(systemName: icon)
-                .font(.system(size: 16))
-                .foregroundStyle(color)
+    @ViewBuilder
+    private func nutritionItem(icon: String, value: String, label: String, bgColor: Color, textColor: Color) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 10))
+                    .foregroundColor(textColor)
+                Text(label)
+                    .font(.footnote)
+                    .foregroundColor(textColor)
+            }
+            Spacer().frame(height: 10)
             Text(value)
-                .font(.subheadline)
-                .foregroundColor(.black)
-            Text(label)
-                .font(.caption)
-                .foregroundColor(.gray)
+                .font(.headline)
+                .foregroundColor(textColor)
         }
-        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 15)
+        .padding(.vertical, 10)
+        .background(bgColor)
+        .cornerRadius(15)
+    }
+    
+    // MARK: - Serving Size Selection
+    private var servingSizeSelection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Serving Size")
+                .font(.body)
+                .foregroundStyle(.newblek)
+                .padding(.bottom, 4)
+            
+            VStack(spacing: 0) {
+                radioButton(id: "1 serving", label: "1 Serving", value: "50g")
+                Divider()
+                radioButton(id: "1/2 serving", label: "1/2 Serving", value: "25g")
+            }
+            .background(Color(.systemGroupedBackground))
+            .cornerRadius(12)
+        }
+        .padding(.top, 10)
     }
 
-    private func separator() -> some View {
-        Rectangle()
-            .fill(Color("colorPrimary"))
-            .frame(width: 1, height: 40)
-            .padding(.horizontal, 4)
+    @ViewBuilder
+    private func radioButton(id: String, label: String, value: String) -> some View {
+        Button(action: {
+            withAnimation {
+                selectedServingSize = id
+            }
+        }) {
+            HStack {
+                Image(systemName: selectedServingSize == id ? "largecircle.fill.circle" : "circle")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.orange)
+
+                Text(label)
+                    .font(.body)
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                Text(value)
+                    .font(.body)
+                    .foregroundColor(.primary)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .background(Color.white)
     }
 }
+
+// MARK: - Extension for clean number formatting
+extension Double {
+    var clean: String {
+        return truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", self)
+            : String(format: "%.1f", self)
+    }
+}
+
 
 #Preview {
     do {

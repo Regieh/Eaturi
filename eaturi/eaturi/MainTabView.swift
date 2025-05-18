@@ -10,75 +10,68 @@ struct MainTabView: View {
     @State var isCartVisible: Bool = false
     @State private var showSplash = true
     @State private var shouldNavigateToCart = false  // Add this state variable
+
     var body: some View {
         Group {
-            if showSplash {
-                SplashScreenView()
-                    .transition(.opacity)
-            } else {
-                NavigationStack {
-                    VStack {
-                        ZStack {
-                            switch selectedTab {
-                            case 0:
-                                ContentView(
-                                    cartItems: $cartItems,
-                                    isCartVisible: $isCartVisible,
-                                    foodItems: .constant(foodItems),
-                                    selectedTab: $selectedTab,
-                                    shouldNavigateToCart: $shouldNavigateToCart  // Pass this binding
-                                )
-                                .environment(\.modelContext, modelContext)
-                                
-                            case 1:
-                                HistoryView(onPickAgain: { selectedCart in
+            NavigationStack {
+                VStack {
+                    ZStack {
+                        switch selectedTab {
+                        case 0:
+                            ContentView(
+                                cartItems: $cartItems,
+                                isCartVisible: $isCartVisible,
+                                foodItems: .constant(foodItems),
+                                selectedTab: $selectedTab,
+                                shouldNavigateToCart: $shouldNavigateToCart  // Pass this binding
+                            )
+                            .environment(\.modelContext, modelContext)
+                            
+                        case 1:
+                            HistoryView(
+                                cartItems: $cartItems,
+                                onPickAgain: { selectedCart in
                                     cartItems = selectedCart
                                     isCartVisible = true
                                     selectedTab = 0
-                                    shouldNavigateToCart = true  // Set this to true
-                                })
-                                .environment(\.modelContext, modelContext)
-                                
-                            default:
-                                EmptyView()
-                            }
+                                    shouldNavigateToCart = true
+                                },
+                                foodItems: foodItems
+                            )
+                            .environment(\.modelContext, modelContext)
+                            
+                        default:
+                            EmptyView()
                         }
-                        HStack {
-                            Button {
-                                selectedTab = 0
-                            } label: {
-                                CustomTabBarItem(icon: "fork.knife", title: "Menu", isSelected: selectedTab == 0, color: Color("colorPrimary"))
-                            }
-                            Button {
-                                selectedTab = 1
-                            } label: {
-                                CustomTabBarItem(icon: "list.bullet.clipboard", title: "History", isSelected: selectedTab == 1, color: Color("colorPrimary"))
-                            }
+                    }
+                    HStack(spacing: 0) {
+                        Button {
+                            selectedTab = 0
+                        } label: {
+                            CustomTabBarItem(icon: "fork.knife", title: "Menu", isSelected: selectedTab == 0, color: Color("colorPrimary"))
                         }
-                        .frame(height: 90)
-                        .background(Color.white)
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: -1)
+
+                        Button {
+                            selectedTab = 1
+                        } label: {
+                            CustomTabBarItem(icon: "list.bullet.clipboard", title: "History", isSelected: selectedTab == 1, color: Color("colorPrimary"))
+                        }
                     }
-                    .ignoresSafeArea(.all)
-                    .preferredColorScheme(.light)
-                    .navigationDestination(isPresented: $shouldNavigateToCart) {
-                        CartView(
-                            cartItems: $cartItems,
-                            foodItems: foodItems,
-                            selectedTab: $selectedTab
-                        )
-                    }
+                    .frame(height: 60)
+                    .background(Color.white.ignoresSafeArea(edges: .bottom))
                 }
-                .ignoresSafeArea(.keyboard)
-                .ignoresSafeArea(.container, edges: .top)
-            }
-        }
-        .onAppear{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4){
-                withAnimation(.easeOut(duration: 0.2)){
-                    showSplash = false
+                .ignoresSafeArea(.all)
+                .preferredColorScheme(.light)
+                .navigationDestination(isPresented: $shouldNavigateToCart) {
+                    CartView(
+                        cartItems: $cartItems,
+                        foodItems: foodItems,
+                        selectedTab: $selectedTab
+                    )
                 }
             }
+            .ignoresSafeArea(.keyboard)
+            .ignoresSafeArea(.container, edges: .top)
         }
     }
 }

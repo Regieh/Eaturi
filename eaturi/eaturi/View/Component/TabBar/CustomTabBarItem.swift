@@ -12,21 +12,16 @@ struct CustomTabBarItem: View {
     let title: String
     let isSelected: Bool
     let color: Color
-    
+
     var body: some View {
-        VStack(spacing: 5) {
-            Rectangle()
-                .fill(isSelected ? color : Color.clear)
-                .frame(height: 5)
-                .cornerRadius(16)
-            Spacer()
+        VStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.system(size: 25))
+                .font(.system(size: 20))
                 .foregroundColor(isSelected ? color : .gray)
+
             Text(title)
                 .font(.caption)
                 .foregroundColor(isSelected ? color : .gray)
-            Spacer()
         }
         .frame(maxWidth: .infinity)
     }

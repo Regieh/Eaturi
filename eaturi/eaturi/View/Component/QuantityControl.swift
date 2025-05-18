@@ -12,12 +12,16 @@ struct QuantityControl: View {
     var body: some View {
         HStack(spacing: textSpacing){
             // Minus button
-            Button(action: onDecrement) {
+            Button(action: {
+                if quantity > 1 {
+                    onDecrement()
+                }
+            }) {
                 ZStack {
                     Circle()
-                        .fill(Color("colorPrimary"))
+                        .fill(quantity > 1 ? Color("colorOren") : Color("colorOrenDisable"))
                         .frame(width: buttonSize, height: buttonSize)
-                    
+
                     Image(systemName: "minus")
                         .resizable()
                         .scaledToFit()
@@ -25,6 +29,8 @@ struct QuantityControl: View {
                         .foregroundColor(.white)
                 }
             }
+            .disabled(quantity <= 1)
+
             
             // Quantity text
             Text("\(quantity)")
@@ -36,7 +42,7 @@ struct QuantityControl: View {
             Button(action: onIncrement) {
                 ZStack {
                     Circle()
-                        .fill(Color("colorPrimary"))
+                        .fill(Color("colorOren"))
                         .frame(width: buttonSize, height: buttonSize)
                     
                     Image(systemName: "plus")
@@ -48,7 +54,6 @@ struct QuantityControl: View {
             }
         }
         .padding(6)
-        .background(Color.white)
         .cornerRadius(buttonSize / 2 + 6)
     }
 }

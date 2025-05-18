@@ -13,7 +13,13 @@ struct FilterView: View {
 
     @State private var activeFilters: [String] = []
 
-    let filters = ["Low Carb", "Low Calorie", "High Protein", "Low Fat", "High Fiber"]
+    let filters = [
+        ("Low Carb", "< 20g carbs"),
+        ("Low Calorie", "< 250 kcal"),
+        ("Low Fat", "< 10g fat"),
+        ("High Protein", "> 20g protein"),
+        ("High Fiber", "≥ 4g fiber")
+    ]
 
     init(onSelectFilter: @escaping ([String]) -> Void, selectedFilters: [String]) {
         self.onSelectFilter = onSelectFilter
@@ -23,59 +29,41 @@ struct FilterView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Filter Food")
+            Text("Filter by")
                 .font(.title)
                 .fontWeight(.bold)
                 .padding()
 
-
             HStack {
-                ForEach(["Low Carb", "Low Calorie", "Low Fat"], id: \.self) { filter in
-                    Button(action: {
-                        toggleFilter(filter)
-                    }) {
-                        Text(filter)
-                            .padding()
-                            .frame(height: 50)
-                            .background(activeFilters.contains(filter) ? Color("colorTertiary") : Color.gray.opacity(0.1))
-                            .foregroundColor(activeFilters.contains(filter) ? Color("newblek") : .newblek)
-                            .cornerRadius(30)
-                            .overlay(
-                                     RoundedRectangle(cornerRadius: 30)
-                                        .stroke(activeFilters.contains(filter) ? Color("colorPrimary") : Color.clear, lineWidth: 2))
-                    }
+                ForEach(filters.prefix(2), id: \.0) { filter in
+                    filterButton(title: filter.0, subtitle: filter.1)
                 }
             }
 
             HStack {
-                ForEach(["High Protein", "High Fiber"], id: \.self) { filter in
-                    Button(action: {
-                        toggleFilter(filter)
-                    }) {
-                        Text(filter)
-                            .padding()
-                            .frame(height: 50)
-                            .background(activeFilters.contains(filter) ? Color("colorTertiary") : Color.gray.opacity(0.1))
-                            .foregroundColor(activeFilters.contains(filter) ? Color("newblek") : .newblek)
-                            .cornerRadius(30)
-                            .overlay(
-                                     RoundedRectangle(cornerRadius: 30)
-                                        .stroke(activeFilters.contains(filter) ? Color("colorPrimary") : Color.clear, lineWidth: 2))
-                    }
+                ForEach(filters[2...3], id: \.0) { filter in
+                    filterButton(title: filter.0, subtitle: filter.1)
+                }
+            }
+
+            HStack {
+                ForEach(filters.suffix(1), id: \.0) { filter in
+                    filterButton(title: filter.0, subtitle: filter.1)
                 }
             }
 
             Spacer()
 
-            HStack {
+            HStack(spacing: 16) {
                 Button(action: {
                     activeFilters.removeAll()
                     onSelectFilter([])
                 }) {
                     Text("Clear")
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color("colorPrimary"))
                         .padding()
                         .frame(width: 130, height: 40)
+                        .cornerRadius(20)
                 }
 
                 Button(action: {
@@ -93,12 +81,32 @@ struct FilterView: View {
             }
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: 400, alignment: .top)
-        .background(Color.white)
-        .cornerRadius(20)
-        .presentationDetents([.height(300)])
+        .frame(maxWidth: .infinity, alignment: .top)
+        .background(Color(.systemBackground))
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(30)
     }
-    
+
+    private func filterButton(title: String, subtitle: String) -> some View {
+        Button(action: {
+            toggleFilter(title)
+        }) {
+            VStack(spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                Text(subtitle)
+                    .font(.subheadline)
+            }
+            .padding()
+            .frame(height: 60)
+            .frame(width: 180)
+            .background(activeFilters.contains(title) ? Color("colorOren") : Color.gray.opacity(0.1))
+            .foregroundColor(activeFilters.contains(title) ? Color.white : .newblek)
+            .cornerRadius(50)
+        }
+    }
+
     private func toggleFilter(_ filter: String) {
         if activeFilters.contains(filter) {
             activeFilters.removeAll { $0 == filter }

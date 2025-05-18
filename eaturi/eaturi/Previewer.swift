@@ -19,9 +19,9 @@ struct Previewer {
 
                 price: 25000, calories: 350, protein: 30, carbs: 25, fiber: 2, fat: 15,
 
-                isPopular: true, categories: ["Ayam"],
+                isPopular: true, categories: ["Chicken"],
 
-                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
+                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
 
                 foodDescription: "Ayam panggang saus teriyaki"
 
@@ -33,9 +33,9 @@ struct Previewer {
 
                 price: 27000, calories: 380, protein: 32, carbs: 20, fiber: 3, fat: 18,
 
-                isPopular: true, categories: ["Ayam"],
+                isPopular: true, categories: ["Chicken"],
 
-                availableDays: ["Senin", "Rabu", "Jumat"],
+                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
 
                 foodDescription: "Ayam bistik saus jamur"
 
@@ -47,10 +47,10 @@ struct Previewer {
 
                 price: 23000, calories: 320, protein: 28, carbs: 30, fiber: 2, fat: 12,
 
-                isPopular: true, categories: ["Ayam"],
+                isPopular: true, categories: ["Chicken"],
 
-                availableDays: ["Senin", "Selasa", "Kamis"],
-
+                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
+                
                 foodDescription: "Ayam saus asam manis"
 
             ),
@@ -61,7 +61,7 @@ struct Previewer {
 
                 price: 28000, calories: 300, protein: 35, carbs: 15, fiber: 2, fat: 14,
 
-                isPopular: true, categories: ["Ayam"],
+                isPopular: true, categories: ["Chicken"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -75,7 +75,7 @@ struct Previewer {
 
                 price: 24000, calories: 380, protein: 34, carbs: 18, fiber: 3, fat: 20,
 
-                isPopular: true, categories: ["Ayam"],
+                isPopular: true, categories: ["Chicken"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -89,7 +89,7 @@ struct Previewer {
 
                 price: 22000, calories: 400, protein: 28, carbs: 22, fiber: 2, fat: 22,
 
-                isPopular: true, categories: ["Ayam"],
+                isPopular: true, categories: ["Chicken"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -106,9 +106,9 @@ struct Previewer {
 
                 price: 20000, calories: 250, protein: 25, carbs: 10, fiber: 2, fat: 10,
 
-                isPopular: false, categories: ["Ikan"],
+                isPopular: false, categories: ["Fish"],
 
-                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
+                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
 
                 foodDescription: "Ikan cakalang suwir pedas"
 
@@ -120,7 +120,7 @@ struct Previewer {
 
                 price: 28000, calories: 300, protein: 28, carbs: 25, fiber: 1, fat: 12,
 
-                isPopular: true, categories: ["Ikan"],
+                isPopular: true, categories: ["Fish"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -134,7 +134,7 @@ struct Previewer {
 
                 price: 18000, calories: 280, protein: 20, carbs: 15, fiber: 2, fat: 15,
 
-                isPopular: false, categories: ["Ikan"],
+                isPopular: false, categories: ["Fish"],
 
                 availableDays: ["Selasa", "Kamis"],
 
@@ -148,7 +148,7 @@ struct Previewer {
 
                 price: 17000, calories: 270, protein: 22, carbs: 12, fiber: 2, fat: 12,
 
-                isPopular: true, categories: ["Ikan"],
+                isPopular: true, categories: ["Fish"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -162,7 +162,7 @@ struct Previewer {
 
                 price: 30000, calories: 250, protein: 28, carbs: 10, fiber: 1, fat: 10,
 
-                isPopular: true, categories: ["Ikan"],
+                isPopular: true, categories: ["Fish"],
 
                 availableDays: ["Senin", "Selasa", "Rabu", "Kamis"],
 
@@ -176,7 +176,7 @@ struct Previewer {
 
                 price: 12000, calories: 200, protein: 4, carbs: 30, fiber: 3, fat: 8,
 
-                isPopular: false, categories: ["Lainnya"],
+                isPopular: false, categories: ["Others"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -190,7 +190,7 @@ struct Previewer {
 
                 price: 15000, calories: 180, protein: 15, carbs: 8, fiber: 1, fat: 8,
 
-                isPopular: true, categories: ["Ikan"],
+                isPopular: true, categories: ["Fish"],
 
                 availableDays: ["Selasa", "Kamis"],
 
@@ -204,7 +204,7 @@ struct Previewer {
 
                 price: 15000, calories: 250, protein: 10, carbs: 15, fiber: 1, fat: 15,
 
-                isPopular: true, categories: ["Lainnya"],
+                isPopular: true, categories: ["Others"],
 
                 availableDays: ["Selasa", "Kamis"],
 
@@ -213,7 +213,7 @@ struct Previewer {
             ),
 
 
-            // MARK: - Telur (7 items)
+            // MARK: - Egg (7 items)
 
             FoodModel(
 
@@ -221,7 +221,7 @@ struct Previewer {
 
                 price: 8000, calories: 150, protein: 10, carbs: 2, fiber: 0, fat: 10,
 
-                isPopular: false, categories: ["Telur"],
+                isPopular: false, categories: ["Egg"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -235,7 +235,7 @@ struct Previewer {
 
                 price: 10000, calories: 180, protein: 12, carbs: 3, fiber: 1, fat: 12,
 
-                isPopular: true, categories: ["Telur"],
+                isPopular: true, categories: ["Egg"],
 
                 availableDays: ["Selasa", "Kamis"],
 
@@ -249,7 +249,7 @@ struct Previewer {
 
                 price: 12000, calories: 200, protein: 13, carbs: 5, fiber: 1, fat: 14,
 
-                isPopular: true, categories: ["Telur"],
+                isPopular: true, categories: ["Egg"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -263,7 +263,7 @@ struct Previewer {
 
                 price: 10000, calories: 170, protein: 11, carbs: 4, fiber: 1, fat: 11,
 
-                isPopular: true, categories: ["Telur"],
+                isPopular: true, categories: ["Egg"],
 
                 availableDays: ["Selasa", "Kamis"],
 
@@ -277,7 +277,7 @@ struct Previewer {
 
                 price: 12000, calories: 180, protein: 10, carbs: 5, fiber: 1, fat: 8,
 
-                isPopular: true, categories: ["Telur"],
+                isPopular: true, categories: ["Egg"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -291,7 +291,7 @@ struct Previewer {
 
                 price: 13000, calories: 220, protein: 14, carbs: 8, fiber: 1, fat: 12,
 
-                isPopular: false, categories: ["Telur"],
+                isPopular: false, categories: ["Egg"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -305,7 +305,7 @@ struct Previewer {
 
                 price: 11000, calories: 150, protein: 9, carbs: 6, fiber: 1, fat: 8,
 
-                isPopular: false, categories: ["Lainnya"],
+                isPopular: false, categories: ["Others"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -314,7 +314,7 @@ struct Previewer {
             ),
 
 
-            // MARK: - Sayuran (Continue removing 'id: UUID()' for all items)
+            // MARK: - Veggies (Continue removing 'id: UUID()' for all items)
 
              FoodModel(
 
@@ -322,7 +322,7 @@ struct Previewer {
 
                  price: 8000, calories: 70, protein: 2, carbs: 8, fiber: 3, fat: 1,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -336,7 +336,7 @@ struct Previewer {
 
                  price: 7000, calories: 60, protein: 3, carbs: 5, fiber: 2, fat: 1,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -350,7 +350,7 @@ struct Previewer {
 
                  price: 9000, calories: 65, protein: 2, carbs: 6, fiber: 2, fat: 1,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -364,7 +364,7 @@ struct Previewer {
 
                  price: 10000, calories: 120, protein: 5, carbs: 10, fiber: 2, fat: 3,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -378,7 +378,7 @@ struct Previewer {
 
                  price: 9000, calories: 90, protein: 4, carbs: 8, fiber: 3, fat: 2,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -392,7 +392,7 @@ struct Previewer {
 
                  price: 10000, calories: 110, protein: 3, carbs: 12, fiber: 4, fat: 1,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -406,7 +406,7 @@ struct Previewer {
 
                  price: 9000, calories: 100, protein: 1, carbs: 12, fiber: 3, fat: 1,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -420,7 +420,7 @@ struct Previewer {
 
                  price: 18000, calories: 220, protein: 12, carbs: 25, fiber: 4, fat: 10,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Senin", "Kamis"],
 
@@ -434,7 +434,7 @@ struct Previewer {
 
                  price: 9000, calories: 80, protein: 3, carbs: 8, fiber: 3, fat: 2,
 
-                 isPopular: false, categories: ["Sayuran"],
+                 isPopular: false, categories: ["Veggies"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -442,7 +442,7 @@ struct Previewer {
 
              ),
             
-            // MARK: - Gorengan
+            // MARK: - Fried
 
              FoodModel(
 
@@ -450,7 +450,7 @@ struct Previewer {
 
                  price: 5000, calories: 150, protein: 3, carbs: 20, fiber: 2, fat: 8,
 
-                 isPopular: true, categories: ["Gorengan"],
+                 isPopular: true, categories: ["Fried"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -464,7 +464,7 @@ struct Previewer {
 
                  price: 12000, calories: 300, protein: 12, carbs: 25, fiber: 1, fat: 18,
 
-                 isPopular: true, categories: ["Gorengan"],
+                 isPopular: true, categories: ["Fried"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -478,7 +478,7 @@ struct Previewer {
 
                  price: 5000, calories: 130, protein: 2, carbs: 18, fiber: 2, fat: 7,
 
-                 isPopular: true, categories: ["Gorengan"],
+                 isPopular: true, categories: ["Fried"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -492,7 +492,7 @@ struct Previewer {
 
                  price: 8000, calories: 120, protein: 8, carbs: 10, fiber: 1, fat: 6,
 
-                 isPopular: true, categories: ["Gorengan"],
+                 isPopular: true, categories: ["Fried"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -506,7 +506,7 @@ struct Previewer {
 
                  price: 5000, calories: 100, protein: 2, carbs: 15, fiber: 0, fat: 5,
 
-                 isPopular: true, categories: ["Gorengan"],
+                 isPopular: true, categories: ["Fried"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -516,7 +516,7 @@ struct Previewer {
 
 
 
-             // MARK: - Nasi
+             // MARK: - Rice
 
              FoodModel(
 
@@ -524,7 +524,7 @@ struct Previewer {
 
                  price: 10000, calories: 200, protein: 4, carbs: 45, fiber: 1, fat: 1,
 
-                 isPopular: true, categories: ["Nasi"],
+                 isPopular: true, categories: ["Rice"],
 
                  availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
 
@@ -538,7 +538,7 @@ struct Previewer {
 
                  price: 6000, calories: 100, protein: 2, carbs: 22, fiber: 0, fat: 0,
 
-                 isPopular: true, categories: ["Nasi"],
+                 isPopular: true, categories: ["Rice"],
 
                  availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
 
@@ -552,7 +552,7 @@ struct Previewer {
 
                  price: 12000, calories: 180, protein: 5, carbs: 40, fiber: 3, fat: 1,
 
-                 isPopular: true, categories: ["Nasi"],
+                 isPopular: true, categories: ["Rice"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -566,7 +566,7 @@ struct Previewer {
 
                  price: 7000, calories: 90, protein: 2, carbs: 20, fiber: 1, fat: 0,
 
-                 isPopular: true, categories: ["Nasi"],
+                 isPopular: true, categories: ["Rice"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -620,7 +620,7 @@ struct Previewer {
              ),
 
 
-             // MARK: - Lainnya (including Mie, Daging)
+             // MARK: - Others (including Mie, Daging)
 
              FoodModel(
 
@@ -628,7 +628,7 @@ struct Previewer {
 
                  price: 18000, calories: 350, protein: 12, carbs: 45, fiber: 2, fat: 15,
 
-                 isPopular: true, categories: ["Mie"],
+                 isPopular: true, categories: ["Others"],
 
                  availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
 
@@ -642,7 +642,7 @@ struct Previewer {
 
                  price: 10000, calories: 200, protein: 12, carbs: 15, fiber: 3, fat: 8,
 
-                 isPopular: false, categories: ["Lainnya"],
+                 isPopular: false, categories: ["Others"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -656,7 +656,7 @@ struct Previewer {
 
                  price: 35000, calories: 420, protein: 38, carbs: 25, fiber: 2, fat: 25,
 
-                 isPopular: true, categories: ["Daging"],
+                 isPopular: true, categories: ["Beef"],
 
                  availableDays: ["Selasa", "Rabu", "Kamis", "Jumat"],
 
@@ -670,7 +670,7 @@ struct Previewer {
 
                 price: 20000, calories: 380, protein: 15, carbs: 50, fiber: 3, fat: 18,
 
-                isPopular: true, categories: ["Mie"],
+                isPopular: true, categories: ["Others"],
 
                 availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -684,7 +684,7 @@ struct Previewer {
 
                  price: 35000, calories: 280, protein: 25, carbs: 15, fiber: 2, fat: 12,
 
-                 isPopular: false, categories: ["Lainnya"],
+                 isPopular: false, categories: ["Beef"],
 
                  availableDays: ["Jumat"],
 
@@ -698,7 +698,7 @@ struct Previewer {
 
                  price: 40000, calories: 450, protein: 40, carbs: 20, fiber: 2, fat: 28,
 
-                 isPopular: true, categories: ["Daging"],
+                 isPopular: true, categories: ["Beef"],
 
                  availableDays: ["Rabu", "Jumat"],
 
@@ -712,7 +712,7 @@ struct Previewer {
 
                  price: 22000, calories: 300, protein: 28, carbs: 12, fiber: 2, fat: 15,
 
-                 isPopular: false, categories: ["Ikan"],
+                 isPopular: false, categories: ["Fish"],
 
                  availableDays: ["Selasa", "Kamis"],
 
@@ -726,7 +726,7 @@ struct Previewer {
 
                  price: 15000, calories: 250, protein: 14, carbs: 10, fiber: 2, fat: 15,
 
-                 isPopular: true, categories: ["Telur"],
+                 isPopular: true, categories: ["Egg"],
 
                  availableDays: ["Jumat"],
 
@@ -740,7 +740,7 @@ struct Previewer {
 
                  price: 12000, calories: 180, protein: 15, carbs: 5, fiber: 0, fat: 10,
 
-                 isPopular: false, categories: ["Lainnya"],
+                 isPopular: false, categories: ["Others"],
 
                  availableDays: ["Rabu"],
 
@@ -758,7 +758,7 @@ struct Previewer {
 
                  price: 10000, calories: 120, protein: 1, carbs: 28, fiber: 2, fat: 0,
 
-                 isPopular: true, categories: ["Minuman"],
+                 isPopular: true, categories: ["Drinks"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 
@@ -772,7 +772,7 @@ struct Previewer {
 
                  price: 5000, calories: 50, protein: 0, carbs: 12, fiber: 0, fat: 0,
 
-                 isPopular: true, categories: ["Minuman"],
+                 isPopular: true, categories: ["Drinks"],
 
                  availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
 
@@ -786,7 +786,7 @@ struct Previewer {
 
                  price: 8000, calories: 80, protein: 2, carbs: 10, fiber: 0, fat: 3,
 
-                 isPopular: true, categories: ["Minuman"],
+                 isPopular: true, categories: ["Drinks"],
 
                  availableDays: ["Senin", "Rabu", "Jumat"],
 

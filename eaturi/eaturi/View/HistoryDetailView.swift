@@ -191,6 +191,7 @@ struct FoodItemView: View {
     let food: FoodModel
     let quantity: Int
     
+    
     var body: some View {
         HStack(spacing: 16) {
             Image(food.image)

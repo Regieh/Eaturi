@@ -4,99 +4,44 @@ import _SwiftData_SwiftUI
 struct HistoryCardView: View {
     let record: HistoryRecord
     let onPickAgain: ([UUID: Int]) -> Void
-    
+
+    @Query private var foodItems: [FoodModel]
     
     var body: some View {
-        NavigationLink(destination: HistoryDetailView(record: record)) {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(dateFormatter.string(from: record.timestamp) + ", \(record.totalQuantity) items")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                HStack(spacing: 12) {
-                    let productIDs = Array(record.cart.keys)
-                    let displayedProducts = productIDs.prefix(2)
-                    let remainingCount = record.cart.count - displayedProducts.count
-                    ForEach(displayedProducts, id: \.self) { productID in
-                        ProductImageView(productID: productID)
-                            .frame(width: 100, height: 100)
-                    }
-                    if remainingCount > 0 {
-                        AdditionalProductsView(count: remainingCount)
-                            .frame(width: 100, height: 100)
-                    }
-                }
-                HStack {
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "flame.fill")
-                                .foregroundColor(.orange)
-                            Text("\(record.totalCalories) kcal")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.secondary)
-                        }
-                        HStack(spacing: 10) {
-                            HStack(spacing: 3) {
-                                Image(systemName: "circle.hexagongrid.fill")
-                                    .font(.caption)
-                                    .foregroundColor(.yellow)
-                                Text("\(record.totalFat)g")
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            HStack(spacing: 1) {
-                                Image(systemName: "bolt.fill")
-                                    .font(.caption)
-                                    .foregroundColor(.red)
-                                Text("\(record.totalProtein)g")
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.secondary)
-                            }
-                            
-                            HStack(spacing: 3) {
-                                Image(systemName:"chart.pie.fill")
-                                    .font(.caption)
-                                    .foregroundColor(.blue)
-                                Text("\(record.totalCarbs)g")
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        
-                    }
-            
-                    Spacer()
-                    Text("Rp \(record.totalPrice)")
-                        .font(.body)
-                        .foregroundColor(Color("colorPrimary"))
-                }
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        onPickAgain(record.cart)
-                    }) {
-                        Text("Pick Again")
-                            .font(.headline)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 20)
-                            .background(Color("colorPrimary"))
-                            .foregroundColor(.white)
-                            .cornerRadius(25)
-                    }
+        VStack(alignment: .leading, spacing: 12) {
+            // Header with date and total items
+            Text("Lunch Logged")
+                .font(.headline)
+                .foregroundColor(.black)
+                .padding(.horizontal)
+
+            // Each product in its own card
+            ForEach(Array(record.cart.keys), id: \.self) { productID in
+                if let food = foodItems.first(where: { $0.id == productID }),
+                   let quantity = record.cart[productID] {
+                    MealCardView(food: food, quantity: quantity)
                 }
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(20)
-            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
+
+            HStack {
+                Spacer()
+                Button(action: {
+                    onPickAgain(record.cart)
+                }) {
+                    Text("Pick Again")
+                        .font(.headline)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 20)
+                        .background(Color("colorPrimary"))
+                        .foregroundColor(.white)
+                        .cornerRadius(25)
+                }
+                Spacer()
+            }
         }
-        .buttonStyle(PlainButtonStyle()) // Ensures the card doesn't look like a button
+        .padding()
     }
-    
+
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -104,37 +49,111 @@ struct HistoryCardView: View {
     }()
 }
 
-struct ProductImageView: View {
-    @Query private var foodItems: [FoodModel]
-    let productID: UUID
+// MARK: - Meal Card View
+
+struct MealCardView: View {
+    let food: FoodModel
+    let quantity: Int
     
     var body: some View {
-        if let food = foodItems.first(where: { $0.id == productID }) {
+        HStack(alignment: .center, spacing: 12) {
+            // Image
             Image(food.image)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-        } else {
-            // Fallback image if food is not found
-            Image("otak_otak") // You can change this to a placeholder image
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(food.name)
+                    .font(.title3)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                
+                HStack(spacing: 6) {
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName: "drop.fill")
+                        Text("\(food.fat * quantity)g")
+                    }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.blue.opacity(0.10))
+                    .foregroundColor(.blue)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName: "heart.fill")
+                        Text("\(food.protein * quantity)g")
+                    }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.red.opacity(0.10))
+                    .foregroundColor(.red)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName: "fork.knife.circle.fill")
+                        Text("\(food.carbs * quantity)g")
+                    }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.yellow.opacity(0.10))
+                    .foregroundColor(.orange)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName: "leaf.fill")
+                        Text("\(food.fiber * quantity)g")
+                    }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.green.opacity(0.10))
+                    .foregroundColor(.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+                
+                Spacer(minLength: 3)
+                
+                
+                HStack {
+                    Text("\(food.calories * quantity) kcal")
+                        .font(.title3)
+                        .foregroundColor(.black)
+                    
+                    Spacer()
+                    
+                    Text("x\(quantity) serving")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+            }
         }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 2)
     }
-}
-
-struct AdditionalProductsView: View {
-    let count: Int
-
-    var body: some View {
-        Text("+\(count)")
-            .font(.headline)
-            .frame(width: 100, height: 100)
-            .background(Color.gray.opacity(0.3))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+    
+    // MARK: - Nutrient View
+    
+    struct NutrientIconView: View {
+        let value: Int
+        let symbol: String
+        let color: Color
+        var unit: String = "g"
+        
+        var body: some View {
+            HStack(spacing: 4) {
+                Image(systemName: symbol)
+                    .font(.caption)
+                    .foregroundColor(color)
+                Text("\(value)\(unit)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
     }
 }
 

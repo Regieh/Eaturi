@@ -3,6 +3,7 @@ import SwiftUI
 struct CartPopUp: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var foodItems: [FoodModel]
+    @Binding var isCartVisible: Bool // or @State if local
     var onTap: () -> Void
 
     var totalQuantity: Int {
@@ -32,11 +33,11 @@ struct CartPopUp: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("\(totalQuantity) items")
                     .foregroundColor(.white)
-                    .font(.caption)
+                    .font(.body)
 
-                Text("Rp\(totalPrice)")
-                    .foregroundColor(.white)
-                    .font(.system(.subheadline, weight: .medium))
+//                Text("Rp\(totalPrice)")
+//                    .foregroundColor(.white)
+//                    .font(.system(.subheadline, weight: .medium))
             }.padding(.leading, 10)
 
             Spacer()
@@ -44,19 +45,19 @@ struct CartPopUp: View {
             // Right side: total calories and chevron
             HStack(spacing: 10) {
                 HStack {
-                    Image(systemName: "flame.fill")
-                        .foregroundColor(.orange)
+//                    Image(systemName: "flame.fill")
+//                        .foregroundColor(.orange)
 
                     Text("\(totalCalories) kcal")
-                        .font(.subheadline)
+                        .font(.title3)
                         .fontWeight(.semibold)
-                        .foregroundColor(.colorPrimary)
+                        .foregroundColor(.white)
                         .lineLimit(1) // ✅ Prevent line wrap
                         .layoutPriority(1) // ✅ Make sure this text resists compression
 
                 }
                 .padding(8)
-                .background(Color.white)
+//                .background(Color.white)
                 .cornerRadius(30)
 
                 Image(systemName: "chevron.right.circle.fill")
@@ -77,8 +78,12 @@ struct CartPopUp: View {
             onTap()
         }
         .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: -1)
+           // Slide up animation:
+        .offset(y: isCartVisible ? 0 : UIScreen.main.bounds.height)
+        .animation(.easeOut(duration: 0.3).delay(0.9), value: isCartVisible)
     }
 }
+
 
 
 #Preview {

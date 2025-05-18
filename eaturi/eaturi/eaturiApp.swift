@@ -9,6 +9,16 @@ struct eaturiApp: App {
     
     init() {
         healthManager.requestAuthorization()
+        
+        let appearance = UINavigationBarAppearance()
+               appearance.configureWithTransparentBackground()
+               appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+               appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+               
+               UINavigationBar.appearance().standardAppearance = appearance
+               UINavigationBar.appearance().scrollEdgeAppearance = appearance
+               UINavigationBar.appearance().compactAppearance = appearance
+               UINavigationBar.appearance().tintColor = .black
     }
 
     var body: some Scene {

@@ -36,67 +36,39 @@ struct CartView: View {
     }
     
     var body: some View {
-        ZStack {
-            // Background and main content
+        NavigationStack {
             ZStack {
-                LinearGradient(
-                    gradient: Gradient(stops: [
-                        .init(color: Color("colorSecondary"), location: 0.0),
-                        .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
-                        .init(color: Color("abubg"), location: 0.6)
-                    ]),
-                    startPoint: .topTrailing,
-                    endPoint: .bottom
-                )
-                .edgesIgnoringSafeArea(.all)
+                background
                 
                 VStack {
-                    HStack {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "chevron.backward.circle.fill")
-                                .resizable()
-                                .foregroundColor(Color.colorPrimary)
-                                .frame(width: 33, height: 33)
-                                .dynamicTypeSize(.xSmall...(.accessibility5))
+                    VStack (spacing: 16){
+                        HStack{
+                            Text("Calories")
+                                .font(.subheadline)
+                                .foregroundColor(.orange)
+                            Spacer()
+                            Text("\(totalCalories)")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.orange)
                         }
+                        .padding()
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(15)
+                        .frame(width: 350)
                         
-                        HStack(spacing: 0) {
-                            Text("My")
-                                .font(.system(.title, design: .default))
-                                .bold()
-                                .foregroundColor(.blackGray)
-                                .dynamicTypeSize(.xSmall...(.accessibility5))
-                            
-                            Text("Lunch")
-                                .font(.system(.title, design: .default))
-                                .bold()
-                                .foregroundColor(.colorPrimary)
-                                .dynamicTypeSize(.xSmall...(.accessibility5))
+                        HStack(spacing: 10) {
+                            nutritionItem(icon: "drop.fill", value: "\(totalFat)g", label: "Fat", bgColor: Color.blue.opacity(0.1), textColor: .blue)
+                            nutritionItem(icon: "heart.fill", value: "\(totalProtein)g", label: "Protein", bgColor: Color.red.opacity(0.1), textColor: .red)
+                            nutritionItem(icon: "fork.knife.circle.fill", value: "\(totalCarbs)g", label: "Carbs", bgColor: Color.yellow.opacity(0.1), textColor: .orange)
+                            nutritionItem(icon: "leaf.fill", value: "\(totalFiber)g", label: "Fiber", bgColor: Color.green.opacity(0.1), textColor: .green)
                         }
-                        
-                        Spacer()
                     }
-                    .padding()
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 16)
                     
-                    HStack{
-                        nutritionItem(icon: "flame.fill", value: "\(totalCalories)", label: "Calories", color: .orange)
-                        separator()
-                        nutritionItem(icon: "circle.hexagongrid.fill", value: "\(totalFat) g", label: "Fat", color: .yellow)
-                        separator()
-                        nutritionItem(icon: "bolt.fill", value: "\(totalProtein) g", label: "Protein", color: .red)
-                        separator()
-                        nutritionItem(icon: "chart.pie.fill", value: "\(totalCarbs) g", label: "Carbs", color: .blue)
-                        separator()
-                        nutritionItem(icon: "leaf.fill", value: "\(totalFiber) g", label: "Fiber", color: .green)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(width: UIFontMetrics.default.scaledValue(for: 340))
-                    .padding(.vertical, UIFontMetrics.default.scaledValue(for: 16))
-                    .padding(.horizontal, UIFontMetrics.default.scaledValue(for: 10))
-                    .background(Color.white)
-                    .cornerRadius(20)
-                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
-                    
+                    Spacer()
+
                     ScrollView {
                         VStack(spacing: UIFontMetrics.default.scaledValue(for: 16)) {
                             if cartItems.isEmpty {
@@ -120,11 +92,11 @@ struct CartView: View {
                             }
                         }
                     }
-                    
+
                     Button(action: {
-                            saveToHistory()
+                        saveToHistory()
                     }) {
-                        Text("Save to History")
+                        Text("Log my meal")
                             .font(.system(size: UIFontMetrics.default.scaledValue(for: 20)))
                             .fontWeight(.medium)
                             .foregroundColor(.white)
@@ -137,28 +109,41 @@ struct CartView: View {
                     }
                     .disabled(cartItems.isEmpty)
                 }
-                .navigationBarHidden(true)
-                .toolbar(.hidden, for: .tabBar)
+                .padding(.top)
             }
         }
+//        .navigationTitle("My Meal")
+        .navigationBarTitleDisplayMode(.large)
+    }
+
+    
+    private var background: some View {
+        Color("colorBackground")
+            .edgesIgnoringSafeArea(.all)
     }
     
-    private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
-        VStack {
-            Image(systemName: icon)
-                .font(.system(size: UIFontMetrics.default.scaledValue(for: 15)))
-                .foregroundStyle(color)
+    
+    func nutritionItem(icon: String, value: String, label: String, bgColor: Color, textColor: Color) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 10))
+                    .foregroundColor(textColor)
+                Text(label)
+                    .font(.footnote)
+                    .foregroundColor(textColor)
+            }
+            Spacer().frame(height: 10)
             Text(value)
-                .font(.system(.subheadline, design: .default))
-                .foregroundColor(.black)
-                .dynamicTypeSize(.xSmall...(.accessibility5))
-            Text(label)
-                .font(.system(.caption, design: .default))
-                .foregroundColor(.gray)
-                .dynamicTypeSize(.xSmall...(.accessibility5))
+                .font(.headline)
+                .foregroundColor(textColor)
         }
-        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 15)
+        .padding(.vertical, 10)
+        .background(bgColor)
+        .cornerRadius(15)
     }
+
     
     private func separator() -> some View {
         Rectangle()
@@ -211,89 +196,95 @@ struct CartView: View {
     }
 }
 
-
-
-
 struct CartItemView: View {
     var item: FoodModel
     @Binding var quantity: Int
     
     var body: some View {
-        HStack {
+        HStack(alignment: .center, spacing: 12) {
+            // Image
             Image(item.image)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 80, height: 80)
-                .cornerRadius(10)
+                .scaledToFill()
+                .frame(width: 100, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             
-            VStack(alignment: .leading) {
+            // Food info + nutrients + calories
+            VStack(alignment: .leading, spacing: 8) {
                 Text(item.name)
-                    .font(.system(size: 20))
-                    .fontWeight(.medium)
-                    .lineLimit(1)
-                    .foregroundColor(.newblek)
+                    .font(.title3)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 
-                HStack(spacing: 4) {
-                    Image(systemName:"flame.fill")
-                        .foregroundColor(.orange)
-                    Text("\(item.calories) kcal")
-                        .font(.system(size: 15))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.leading, 3)
-                
-                HStack(spacing: 10) {
+                HStack(spacing: 6) {
                     HStack(spacing: 3) {
-                        Image(systemName: "circle.hexagongrid.fill")
-                            .font(.caption)
-                            .foregroundColor(.yellow)
+                        Image(systemName: "drop.fill")
                         Text("\(item.fat)g")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
                     }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.blue.opacity(0.10))
+                    .foregroundColor(.blue)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     HStack(spacing: 3) {
-                        Image(systemName: "bolt.fill")
-                            .font(.caption)
-                            .foregroundColor(.red)
+                        Image(systemName: "heart.fill")
                         Text("\(item.protein)g")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
                     }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.red.opacity(0.10))
+                    .foregroundColor(.red)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     
                     HStack(spacing: 3) {
-                        Image(systemName:"chart.pie.fill")
-                            .font(.caption)
-                            .foregroundColor(.blue)
+                        Image(systemName: "fork.knife.circle.fill")
                         Text("\(item.carbs)g")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
                     }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.yellow.opacity(0.10))
+                    .foregroundColor(.orange)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName: "leaf.fill")
+                        Text("\(item.fiber)g")
+                    }
+                    .font(.footnote)
+                    .padding(5)
+                    .background(Color.green.opacity(0.10))
+                    .foregroundColor(.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    
+                }
+
+                
+                HStack {
+                    Text("\(item.calories) Kcal")
+                        .font(.title3)
+                        .foregroundColor(.black)
+                    
+                    Spacer()
+                    
+                    QuantityControl(
+                        quantity: $quantity,
+                        onIncrement: {
+                            quantity += 1
+                        },
+                        onDecrement: {
+                            if quantity > 1 {
+                                quantity -= 1
+                            }
+                        },
+                        buttonSize: 24,
+                        iconSize: 10,
+                        fontSize: 16,
+                        textSpacing: 0
+                    )
                 }
                 .padding(.top, 3)
             }
-            
-            Spacer()
-            
-            QuantityControl(
-                quantity: $quantity,
-                onIncrement: {
-                    quantity += 1
-                },
-                onDecrement: {
-                    if quantity > 0 {
-                        quantity -= 1
-                    }
-                },
-                buttonSize: 24,
-                iconSize: 10,
-                fontSize: 16,
-                textSpacing: 0
-            )
         }
         .frame(width: 340, height: 90)
         //        .padding(.top, 8)
@@ -307,9 +298,14 @@ struct CartItemView: View {
 #Preview {
     do {
         let previewer = try Previewer()
-        return MainTabView(cartItems: [:])
-            .modelContainer(previewer.container)
+        return CartView(
+            cartItems: .constant([:]),
+            foodItems: [],
+            selectedTab: .constant(0)
+        )
+        .modelContainer(previewer.container)
     } catch {
         return Text("Preview Error: \(error.localizedDescription)")
     }
 }
+
