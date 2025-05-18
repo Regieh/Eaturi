@@ -97,19 +97,17 @@ struct CartView: View {
                         saveToHistory()
                     }) {
                         Text("Log my meal")
-                            .font(.system(size: UIFontMetrics.default.scaledValue(for: 20)))
-                            .fontWeight(.medium)
+                            .font(.headline)
                             .foregroundColor(.white)
-                            .frame(height: UIFontMetrics.default.scaledValue(for: 40))
-                            .frame(maxWidth: .infinity)
                             .padding()
+                            .frame(width: 220, height: 50)
                             .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
                             .cornerRadius(100)
-                            .padding()
                     }
                     .disabled(cartItems.isEmpty)
                 }
                 .padding(.top)
+                .padding(.bottom)
             }
         }
 //        .navigationTitle("My Meal")

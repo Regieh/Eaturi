@@ -78,6 +78,7 @@ struct ContentView: View {
                         shouldNavigateToCart = true
                     }
                     .padding(.top, 10)
+                    .padding(.bottom, 15)
                     .frame(maxHeight: .infinity, alignment: .bottom)
                 }
                 
