@@ -10,7 +10,7 @@ struct MainTabView: View {
     @State var isCartVisible: Bool = false
     @State private var showSplash = true
     @State private var shouldNavigateToCart = false  // Add this state variable
-
+    
     var body: some View {
         Group {
             NavigationStack {
@@ -29,16 +29,15 @@ struct MainTabView: View {
                             
                         case 1:
                             HistoryView(
-                                cartItems: $cartItems,
-                                onPickAgain: { selectedCart in
+                                onPickAgain: { selectedCart in                 // (same closure)
                                     cartItems = selectedCart
                                     isCartVisible = true
                                     selectedTab = 0
                                     shouldNavigateToCart = true
-                                },
-                                foodItems: foodItems
+                                }
                             )
                             .environment(\.modelContext, modelContext)
+                            
                             
                         default:
                             EmptyView()
@@ -50,7 +49,7 @@ struct MainTabView: View {
                         } label: {
                             CustomTabBarItem(icon: "fork.knife", title: "Menu", isSelected: selectedTab == 0, color: Color("colorPrimary"))
                         }
-
+                        
                         Button {
                             selectedTab = 1
                         } label: {
@@ -58,23 +57,25 @@ struct MainTabView: View {
                         }
                     }
                     .frame(height: 60)
-                    .background(Color.white.ignoresSafeArea(edges: .bottom))
+                    .background(Color.white)
+                    .safeAreaInset(edge: .bottom) {
+                        Color.white.frame(height: 5)
+                    }
+                    }
+                    .ignoresSafeArea(.all)
+                    .navigationDestination(isPresented: $shouldNavigateToCart) {
+                        CartView(
+                            cartItems: $cartItems,
+                            foodItems: foodItems,
+                            selectedTab: $selectedTab
+                        )
+                    }
                 }
-                .ignoresSafeArea(.all)
-                .preferredColorScheme(.light)
-                .navigationDestination(isPresented: $shouldNavigateToCart) {
-                    CartView(
-                        cartItems: $cartItems,
-                        foodItems: foodItems,
-                        selectedTab: $selectedTab
-                    )
-                }
+                .ignoresSafeArea(.keyboard)
+                .ignoresSafeArea(.container, edges: .top)
             }
-            .ignoresSafeArea(.keyboard)
-            .ignoresSafeArea(.container, edges: .top)
         }
     }
-}
 
 #Preview {
     do {

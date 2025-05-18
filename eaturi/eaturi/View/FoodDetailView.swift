@@ -256,7 +256,7 @@ struct FoodDetailView: View {
                 .font(.body)
                 .foregroundStyle(.newblek)
                 .padding(.bottom, 4)
-            
+
             VStack(spacing: 0) {
                 radioButton(id: "1 serving", label: "1 Serving", value: "50g")
                 Divider()
@@ -266,6 +266,7 @@ struct FoodDetailView: View {
             .cornerRadius(12)
         }
         .padding(.top, 10)
+        .disabled(!isAvailableToday) 
     }
 
     @ViewBuilder

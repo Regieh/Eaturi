@@ -9,13 +9,13 @@ struct HistoryCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header with date and total items
+            // Header with meal type
             Text("Lunch Logged")
                 .font(.headline)
                 .foregroundColor(.black)
                 .padding(.horizontal)
 
-            // Each product in its own card
+            // Show each food item once with its quantity
             ForEach(Array(record.cart.keys), id: \.self) { productID in
                 if let food = foodItems.first(where: { $0.id == productID }),
                    let quantity = record.cart[productID] {
@@ -23,6 +23,7 @@ struct HistoryCardView: View {
                 }
             }
 
+            // "Pick Again" Button
             HStack {
                 Spacer()
                 Button(action: {
@@ -70,52 +71,16 @@ struct MealCardView: View {
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                 
+                // Nutrient Info
                 HStack(spacing: 6) {
-                    
-                    HStack(spacing: 3) {
-                        Image(systemName: "drop.fill")
-                        Text("\(food.fat * quantity)g")
-                    }
-                    .font(.footnote)
-                    .padding(5)
-                    .background(Color.blue.opacity(0.10))
-                    .foregroundColor(.blue)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    
-                    HStack(spacing: 3) {
-                        Image(systemName: "heart.fill")
-                        Text("\(food.protein * quantity)g")
-                    }
-                    .font(.footnote)
-                    .padding(5)
-                    .background(Color.red.opacity(0.10))
-                    .foregroundColor(.red)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    
-                    HStack(spacing: 3) {
-                        Image(systemName: "fork.knife.circle.fill")
-                        Text("\(food.carbs * quantity)g")
-                    }
-                    .font(.footnote)
-                    .padding(5)
-                    .background(Color.yellow.opacity(0.10))
-                    .foregroundColor(.orange)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    
-                    HStack(spacing: 3) {
-                        Image(systemName: "leaf.fill")
-                        Text("\(food.fiber * quantity)g")
-                    }
-                    .font(.footnote)
-                    .padding(5)
-                    .background(Color.green.opacity(0.10))
-                    .foregroundColor(.green)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    nutrientChip(icon: "drop.fill", value: food.fat * quantity, color: .blue)
+                    nutrientChip(icon: "heart.fill", value: food.protein * quantity, color: .red)
+                    nutrientChip(icon: "fork.knife.circle.fill", value: food.carbs * quantity, color: .orange)
+                    nutrientChip(icon: "leaf.fill", value: food.fiber * quantity, color: .green)
                 }
-                
+
                 Spacer(minLength: 3)
-                
-                
+
                 HStack {
                     Text("\(food.calories * quantity) kcal")
                         .font(.title3)
@@ -136,26 +101,22 @@ struct MealCardView: View {
         .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 2)
     }
     
-    // MARK: - Nutrient View
-    
-    struct NutrientIconView: View {
-        let value: Int
-        let symbol: String
-        let color: Color
-        var unit: String = "g"
-        
-        var body: some View {
-            HStack(spacing: 4) {
-                Image(systemName: symbol)
-                    .font(.caption)
-                    .foregroundColor(color)
-                Text("\(value)\(unit)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+    // MARK: - Nutrient Chip View
+    @ViewBuilder
+    private func nutrientChip(icon: String, value: Int, color: Color) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: icon)
+            Text("\(value)g")
         }
+        .font(.footnote)
+        .padding(5)
+        .background(color.opacity(0.1))
+        .foregroundColor(color)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
+
+// MARK: - Preview
 
 #Preview {
     do {
