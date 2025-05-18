@@ -2,7 +2,12 @@ import SwiftUI
 import SwiftData
 
 struct MainTabView: View {
+    // MARK: - Environment
+    @EnvironmentObject var streakManager: StreakManager
+    
+    
     @Environment(\.modelContext) private var modelContext
+    
     @Query(sort: \FoodModel.name) private var foodItems: [FoodModel]
     
     @State private var selectedTab = 0
@@ -60,7 +65,7 @@ struct MainTabView: View {
                     .background(Color.white)
                     .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: -2)
                     .safeAreaInset(edge: .bottom) {
-                        Color.white.frame(height: 5)
+                        Color.white.frame(height: 10)
                     }
                     }
                     .ignoresSafeArea(.all)

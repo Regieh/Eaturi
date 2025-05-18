@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct CategoryView: View {
+    // MARK: - Environment
+    @EnvironmentObject var streakManager: StreakManager
     
-    @EnvironmentObject private var streakManager: StreakManager
     
     @Binding var searchText: String
     @Binding var isCategoryReached: Bool
